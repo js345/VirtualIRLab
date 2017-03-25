@@ -1,4 +1,4 @@
-from flask import redirect, url_for
+from flask import make_response, render_template
 from flask_restful import Resource, reqparse
 
 parser = reqparse.RequestParser()
@@ -11,7 +11,8 @@ class SearchAPI(Resource):
 
     def get(self, ds_name):
         args = parser.parse_args()
-        return redirect(url_for('static', filename='index.html'))
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template('index.html'), 200, headers)
 
     def post(self, ds_name):
         args = parser.parse_args()
