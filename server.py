@@ -13,7 +13,7 @@ CORS(app)
 db.init_app(app)
 
 # api.add_resource(UserAPI, '/register')
-api.add_resource(SearchAPI, '/search/<string:ds_name>')
+api.add_resource(SearchAPI, '/search/<string:author>/<string:ds_name>')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1')
