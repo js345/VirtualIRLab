@@ -31,23 +31,24 @@ class Searcher:
         self.idx = metapy.index.make_inverted_index(cfg)
         os.chdir(cwd)
 
-    def search(self, query, ranker_name, num_results=5):
+    def search(self, query, ranker_name, params={}, num_results=5):
         """
         Accept a query and a ranker and run the provided query with the specified
         ranker.
         :param query: string of query
         :param ranker_name: name of the ranker to be used
+        :param params: dict of arguments to be passed into ranker (mutable, do not change)
         :param num_results: return top k relevant documents (k = 5 by default)
         :return: dict of response
         """
-        print(query)
-        print(ranker_name)
-        print(num_results)
         start = time.time()
         q = metapy.index.Document()
         q.content(query)
         try:
-            ranker = getattr(metapy.index, ranker_name)()
+            ranker_cls = getattr(metapy.index, ranker_name)
+            for key in params:
+                setattr(ranker_cls, str(key), float(params[key]))
+            ranker = ranker_cls()
         except Exception as e:
             print("Couldn't make '{}' ranker, using default.".format(ranker_name))
             ranker = self.default_ranker
@@ -55,7 +56,9 @@ class Searcher:
         for result in ranker.score(self.idx, q, num_results):
             response['results'].append({
                 'score': float(result[1]),
-                'doc_id': result[0]
+                'doc_id': result[0],
+                'name': self.idx.doc_name(result[0]),
+                'path': self.idx.doc_path(result[0])
             })
         response['elapsed_time'] = time.time() - start
         return response
