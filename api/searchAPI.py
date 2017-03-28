@@ -17,7 +17,7 @@ class SearchAPI(Resource):
     def get(self, author, ds_name):
         args = parser.parse_args()
         headers = {'Content-Type': 'text/html'}
-        return make_response(render_template('index.html'), 200, headers)
+        return make_response(render_template('search.html'), 200, headers)
 
     def post(self, author, ds_name):
         args = parser.parse_args()
@@ -30,4 +30,5 @@ class SearchAPI(Resource):
 
         path = current_app.root_path + "/data/" + author
         searcher = Searcher(author, ds_name, path)
-        return jsonify(searcher.search(query, ranker, params, num_results))
+        headers = {'Content-Type': 'application/json'}
+        return make_response(jsonify(searcher.search(query, ranker, params, num_results)), 200, headers)

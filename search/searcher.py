@@ -21,9 +21,6 @@ class Searcher:
         :param ds_name: dataset name
         :param path: path to dataset (data/author), append ds_name to get full path
         """
-        print(author)
-        print(ds_name)
-        print(path)
         self.default_ranker = metapy.index.OkapiBM25()
         cfg = self.generate_config(author, ds_name, path)
         cwd = os.getcwd()
@@ -45,10 +42,7 @@ class Searcher:
         q = metapy.index.Document()
         q.content(query)
         try:
-            ranker_cls = getattr(metapy.index, ranker_name)
-            for key in params:
-                setattr(ranker_cls, str(key), float(params[key]))
-            ranker = ranker_cls()
+            ranker = getattr(metapy.index, ranker_name)(**params)
         except Exception as e:
             print("Couldn't make '{}' ranker, using default.".format(ranker_name))
             ranker = self.default_ranker
