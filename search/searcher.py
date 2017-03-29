@@ -70,7 +70,7 @@ class Searcher:
         obj = dict()
         obj['prefix'] = "."
         obj['dataset'] = ds_name
-        obj['corpus'] = "line.toml"
+        obj['corpus'] = "file.toml"
         obj['index'] = ds_name+"-idx"
         obj['analyzers'] = [dict()]
         analyzer = obj['analyzers'][0]

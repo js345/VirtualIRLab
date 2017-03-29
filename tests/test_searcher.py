@@ -10,7 +10,7 @@ class TestSearcher(TestCase):
     def setUp(self):
         self.author = "test"
         self.path = os.getcwd() + "/data/" + self.author
-        self.ds_name = "cranfield"
+        self.ds_name = "testdata"
         self.searcher = Searcher(author=self.author, ds_name=self.ds_name, path=self.path)
 
     def tearDown(self):
@@ -32,7 +32,7 @@ class TestSearcher(TestCase):
         obj1 = dict()
         obj1['prefix'] = "."
         obj1['dataset'] = self.ds_name
-        obj1['corpus'] = "line.toml"
+        obj1['corpus'] = "file.toml"
         obj1['index'] = self.ds_name + "-idx"
         obj1['analyzers'] = [dict()]
         analyzer = obj1['analyzers'][0]
