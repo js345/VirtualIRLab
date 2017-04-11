@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-  <title>MeTA Search</title>
-  <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet"/>
-  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet"/>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="{{ url_for('static', filename='javascript/bootstrap.min.js') }}"></script>
-
+{% extends "basic_layout.html" %}
+{% block body %}
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <!-- Brand and toggle get grouped for better mobile display -->
@@ -64,12 +59,13 @@
   </nav>
   <div id="search-wrapper" class="container">
 
-  {% block body %}{% endblock %}
+  {% block content %}{% endblock %}
   </div>
-  <footer class="footer">
+<!--   <footer class="footer">
     <div class="container">
       <p class="text-muted">
         Powered by <a href="https://meta-toolkit.org/">MeTA</a>
       </p>
     </div>
-  </footer>
+  </footer> -->
+{% endblock %}

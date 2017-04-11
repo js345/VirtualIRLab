@@ -1,0 +1,25 @@
+body{
+	background-color: #eee;
+}
+
+.uploader-container{
+	margin-top: 100px;
+	background-color: #eee;
+	width: 800px;
+	padding: 0px;
+}
+
+table{
+	background-color: #fff;
+	height: 600px;
+	margin-top: 30px;
+	overflow: auto;
+}
+
+.my-btn-group{
+	margin-top: 50px;
+}
+
+button{
+	font-size: 20px;
+}

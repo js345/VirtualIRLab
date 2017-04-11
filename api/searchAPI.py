@@ -30,4 +30,5 @@ class SearchAPI(Resource):
 
         path = current_app.root_path + "/data/" + author
         searcher = Searcher(author, ds_name, path)
+
         return make_response(jsonify(searcher.search(query, ranker, params, num_results)), 200)

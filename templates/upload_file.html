@@ -1,0 +1,32 @@
+{% extends "basic_layout.html" %}
+{% block body %}
+	<link href="{{ url_for('static', filename='css/upload.css') }}" rel="stylesheet"/>
+
+	<div class="container-fluid uploader-container">
+		<button class="btn-lg btn-primary btn-block">Upload Dataset</button>
+		<table class="table table-hover">
+			<tbody>
+				<tr><td>
+					Dataset1
+				</td></tr>
+				<tr><td>
+					Dataset1
+				</td></tr>
+				<tr><td>
+					Dataset1
+				</td></tr>
+			</tbody>
+		</table>
+		<div class="row my-btn-group">
+			<div class="col-md-4">
+				<button class="btn btn-primary btn-block">Upload</button>
+			</div>
+			<div class="col-md-4">
+				<button class="btn btn-primary btn-block">Select All</button>
+			</div>
+			<div class="col-md-4">
+				<button class="btn btn-primary btn-block">Delete</button>
+			</div>
+		</div>
+	</div>
+{% endblock %}
