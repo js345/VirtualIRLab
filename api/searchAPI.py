@@ -17,7 +17,6 @@ class SearchAPI(Resource):
     def get(self, author, ds_name):
         args = parser.parse_args()
         headers = {'Content-Type': 'text/html'}
-        print("hello")
         return make_response(render_template('search.html',documents={}), 200, headers)
 
     def post(self, author, ds_name):

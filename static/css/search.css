@@ -21,6 +21,10 @@
 	margin-left: 20px;
 }
 
+.para-box .input-group:first-child{
+	margin-left: 0px;
+}
+
 .input-group label{
 	float: left;
 	height: 25px;
@@ -32,6 +36,7 @@
 	width: 100px;
 	height: 25px;
 	float: left;
+	padding: 0px 5px;
 }
 
 
@@ -41,6 +46,7 @@
 #results-container{
 	padding: 0px;
 	margin-top: 50px;
+	display: none;
 }
 
 .result{
