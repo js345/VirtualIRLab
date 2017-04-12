@@ -1,4 +1,5 @@
 function search(){
+	console.log("123")
 	search_package = {
 		"url": "/search/dev/testdata",
 		"ranker": "",
@@ -41,7 +42,7 @@ function upload(data){
               "<div class='row'>" +
                 "<div class='col-md-8 doc-info'>" +
                   "<p>score:" + doc.score + "</p>" +
-                "</div>" + 
+                "</div>" +
                 "<div class='col-md-4 btn-container'>" +
                   "<span>Relevance: </span><input id='" + doc.doc_id + "' type='checkbox' name='vehicle' value='Bike'>" +
                 "</div>"+
