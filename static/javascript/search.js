@@ -1,0 +1,3 @@
+$("#search").click(function(){
+	search();
+});
