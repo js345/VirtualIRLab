@@ -9,6 +9,9 @@ from api.uploadAPI import UploadAPI
 
 from util.exception import InvalidUsage
 
+
+from flask import render_template
+
 app = Flask(__name__, static_folder='static/', static_url_path='')
 app.config.from_object('config')
 api = Api(app)
@@ -28,6 +31,16 @@ def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
+
+
+@app.route("/instructor")
+def instructor_page():
+	return render_template("instructor.html")
+
+
+@app.route("/upload")
+def upload_file():
+	return render_template("upload_file.html")
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1')

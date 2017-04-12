@@ -1,0 +1,14 @@
+index = "-idx"
+prefix = "."
+corpus = "file.toml"
+dataset = ""
+
+[[analyzers]]
+ngram = 1
+method = "ngram-word"
+
+[[analyzers.filter]]
+type = "icu-tokenizer"
+
+[[analyzers.filter]]
+type = "lowercase"

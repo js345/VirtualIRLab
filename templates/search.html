@@ -18,7 +18,7 @@
         </div>
 
         <span class="input-group-btn" style="display: inline-block;">
-          <button style="width:142px; margin-left: 20px;" class="btn btn-primary" type="button" id="search_button">Search
+          <button id="search" style="width:142px; margin-left: 20px;" class="btn btn-primary" type="button" id="search_button">Search
             
           </button>
         </span>
@@ -55,33 +55,28 @@
           </tr>
         </thead>
         <tbody>
+          {% for document in documents.results %}
           <tr><td>
             <div class="container-fluid result">
-              <div class="row" class="keyword1">
-                <div class="col-md-12">
-                  <p>keyword1, keyword2</p>
-                </div>
-              </div>
               <div class="row">
                 <div class="col-md-12">
-                  <p>This is document1, This is document1, This is document1, This is document1,
-                  This is document1, This is document1, This is document1, This is document1,This is document1, This is document1, This is document1, This is document1,</p>
+                  <p>{{document.name}}</p>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-8 doc-info">
-                  <p>score: 10 vote: 10 scan: 10</p>
+                  <p>score: {{document.score}}</p>
                 </div>
                 <div class="col-md-4 btn-container">
-                  <button class="btn btn-primary">Not Relevant</button>
-                  <button class="btn btn-primary">Relevant</button>
+                  <span>Relevance: </span><input type="checkbox" name="vehicle" value="Bike">
                 </div>
               </div>
             </div>
           </td></tr>
+          {% endfor %}
         </tbody>
       </table>
  
     </div>
-
+    <script src="{{ url_for('static', filename='javascript/search.js') }}"></script>
 {% endblock %}

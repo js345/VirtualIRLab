@@ -1,0 +1,20 @@
+{% block results %}
+<tr><td>
+  <div class="container-fluid result">
+    <div class="row">
+      <div class="col-md-12">
+        <p>{{document.name}}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8 doc-info">
+        <p>score: {{document.score}}</p>
+      </div>
+      <div class="col-md-4 btn-container">
+        <button class="btn btn-primary">Not Relevant</button>
+        <button class="btn btn-primary">Relevant</button>
+      </div>
+    </div>
+  </div>
+</td></tr>
+{% endblock %}
