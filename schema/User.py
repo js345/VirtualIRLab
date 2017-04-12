@@ -1,7 +1,7 @@
 from schema import db, bcrypt
-from flask import current_app,jsonify
+from flask import current_app
 from itsdangerous import (TimedJSONWebSignatureSerializer
-                          as Serializer, BadSignature, SignatureExpired)
+                          as Serializer)
 
 
 class User(db.DynamicDocument):
