@@ -38,7 +38,7 @@ def instructor_page():
 	return render_template("instructor.html")
 
 
-@app.route("/upload")
+@app.route("/upload_li")
 def upload_file():
 	return render_template("upload_file.html")
 

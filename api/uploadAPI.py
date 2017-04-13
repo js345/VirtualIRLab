@@ -30,6 +30,7 @@ class UploadAPI(Resource):
 			raise InvalidUsage("Dataset already exists", 400)
 		os.mkdir(path)
 		uploaded_files = request.files.getlist("file")
+		print(len(uploaded_files))
 		# save the uploaded files and store in response
 		response = {'files': []}
 		for file in uploaded_files:

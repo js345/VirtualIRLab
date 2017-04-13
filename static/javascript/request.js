@@ -10,7 +10,6 @@ function search(search_package){
 		type: "POST",
 		url: search_package['url'],
 		data: data,
-		tpye: "jsonp"
 	})
 	.success(function(data){
 		console.log(data);
@@ -33,3 +32,4 @@ function submit(){
 		"user":"li"
 	}
 }
+
