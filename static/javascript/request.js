@@ -1,3 +1,4 @@
+
 function search(search_package){
 	data = {
 		"ranker":search_package['ranker'],
@@ -17,6 +18,37 @@ function search(search_package){
 	});
 }
 
+function upload(data){
+	var html = "";
+	data.results.forEach(function(doc){
+		html += "<tr><td>" +
+            "<div class='container-fluid result'>" +
+              "<div class='row'>" +
+                "<div class='col-md-12'>" +
+                  "<p> " + doc.path + "</p>" +
+                "</div>" +
+              "</div>" +
+              "<div class='row'>" +
+                "<div class='col-md-8 doc-info'>" +
+                  "<p>score:" + doc.score + "</p>" +
+                "</div>" +
+                "<div class='col-md-4 btn-container'>" +
+                  "<span>Relevance: </span><input id='" + doc.doc_id + "' type='checkbox' name='vehicle' value='Bike'>" +
+                "</div>"+
+              "</div>"+
+            "</div>"+
+        "</td></tr>"
+	});
+
+
+	$("#results-container table tbody").html(html);
+
+	var btn_html = "<tr><td>" + "<button onclick='submit()' class='btn btn-primary btn-block' style='margin-top:30px;'>Submit</button>" + "<tr></td>";
+	$("#results-container").html($("#results-container").html()+btn_html);
+
+	search_result = data;
+}
+
 function submit(){
 	var documents = [];
 
@@ -32,4 +64,3 @@ function submit(){
 		"user":"li"
 	}
 }
-
