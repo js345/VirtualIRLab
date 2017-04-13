@@ -2,7 +2,7 @@ var uploader_index = 0;
 
 
 $("#upload-btn").click(function(){
-	$(".curr-uploader input").click();
+	$("#files").click();
 });
 
 
@@ -21,15 +21,34 @@ function new_file(){
 			</div> \
 		</div>"
 	);
-
-	console.log("hello");
 }
 
-$("#files-form").submit(function(){
-	var formData = new FormData(this);
-	console.log(formData);
+
+$("#files").change(function(){
+	var files = $(this).prop("files");
+	var html = "";
+	for(var i = 0; i < files.length; i++){
+		var file = files[i];
+		html += "<p>" + file.name + "</p>";
+	}
+	$(".files-container").html(html);
+
 });
 
-$("#submit-btn").click(function(){
-	$("#hidden-submit-btn").click();
+
+$("#submit-btn").click(function(){	
+	var formData = new FormData($("#files-form")[0]);
+
+    $.ajax({
+        url: "/upload",
+        type: 'POST',
+        data: formData,
+        async: false,
+        success: function (data) {
+            $(".files-container").html("");
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
 });

@@ -3,7 +3,6 @@ from flask_restful import Resource, reqparse
 from werkzeug.utils import secure_filename
 from util.utils import allowed_file
 from util.exception import InvalidUsage
-
 import os
 
 parser = reqparse.RequestParser()
@@ -22,16 +21,15 @@ class UploadAPI(Resource):
 		using multipart/form data
 		"""
 		args = parser.parse_args()
-		author = args['author']
-		ds_name = args['ds_name']
+		author = request.form['author']
+		ds_name = request.form['ds_name']
 		path = current_app.root_path + "/data/" + author + "/" + ds_name + "/"
 		# To do: check validity of input
 		if os.path.isdir(path):
 			raise InvalidUsage("Dataset already exists", 400)
 		os.mkdir(path)
 		uploaded_files = request.files.getlist("file")
-		print(len(uploaded_files))
-		# save the uploaded files and store in response
+		# # save the uploaded files and store in response
 		response = {'files': []}
 		for file in uploaded_files:
 			if file and allowed_file(file.filename):
