@@ -3,25 +3,31 @@
   <link href="{{ url_for('static', filename='css/search.css') }}" rel="stylesheet"/>
     <div class="container-fluid">
       <div class="row">
-        <div class="dropdown" style="display: inline-block;">
-          <button style="width: 150px;" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Search Algorithm&nbsp;&nbsp;<span class="caret"></span></button>
-          <ul class="dropdown-menu" role="menu">
+        <!-- <div class="dropdown" style="display: inline-block;">
+          <button id="selected-algo" style="width: 150px;" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Search Algorithm <span class="caret"></span></button>
+          <ul class="search-algorithms" role="menu">
               <li id="OkapiBM25"><a href="#">Okapi BM25</a></li>
               <li id="PivotedLength"><a href="#">Pivoted Length Normalization</a></li>
               <li id="DirichletPrior"><a href="#">Dirichlet Prior Smoothing</a></li>
               <li id="JelinekMercer"><a href="#">Jelinek-Mercer Smoothing</a></li>
               <li id="AbsoluteDiscount"><a href="#">Absolute Discount Smoothing</a></li>
-          </ul>
+          </ul> -->
+        <div style="display: inline-block;">
+          <select id="search-algorithms" class="form-control" style="width: 150px;">
+              <option value="OkapiBM25">Okapi BM25</option>
+              <option value="PivotedLength">Pivoted Length Normalization</option>
+              <option value="DirichletPrior">Dirichlet Prior Smoothing</option>
+              <option value="JelinekMercer">Jelinek-Mercer Smoothing</option>
+              <option value="AbsoluteDiscount">Absolute Discount Smoothing</option>
+          </select>
         </div>
+
         <div style="width: 450px; display: inline-block;">
           <input type="text" class="form-control" placeholder="Enter a query..." id="query_text">
         </div>
 
-        <span class="input-group-btn" style="display: inline-block;">
-          <button id="search" style="width:142px; margin-left: 20px;" class="btn btn-primary" type="button" id="search_button">Search
-            
-          </button>
-        </span>
+          
+        <button id="search" style="width:142px; margin-left: 20px; margin-bottom: 4px" class="btn btn-primary" type="button" id="search_button">Search</button>
       </div>
     </div>
       
@@ -29,20 +35,17 @@
       <div class="row">
         <div class="para-box col-md-12">
           <div class="input-group">
-            <label>Lamda:</label>
-            <input type="" name="">
+            <label>k1:</label>
+            <input type="number" name="">
           </div>
           <div class="input-group">
-            <label>Alpha:</label>
-            <input type="" name="">
+            <label>b:</label>
+            <input type="number" name="">
           </div>
           <div class="input-group">
-            <label>Lamda:</label>
-            <input type="" name="">
+            <label>k3:</label>
+            <input type="number" name="">
           </div>
-        </div>
-        <div class="para-box col-md-6">
-          
         </div>
       </div>
     </div>
@@ -55,28 +58,10 @@
           </tr>
         </thead>
         <tbody>
-          {% for document in documents.results %}
-          <tr><td>
-            <div class="container-fluid result">
-              <div class="row">
-                <div class="col-md-12">
-                  <p>{{document.name}}</p>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-8 doc-info">
-                  <p>score: {{document.score}}</p>
-                </div>
-                <div class="col-md-4 btn-container">
-                  <span>Relevance: </span><input type="checkbox" name="vehicle" value="Bike">
-                </div>
-              </div>
-            </div>
-          </td></tr>
-          {% endfor %}
+          
         </tbody>
       </table>
- 
+      <button onclick="submit()" class='btn btn-primary btn-block' style="margin-top:30px;">Submit</button>
     </div>
     <script src="{{ url_for('static', filename='javascript/search.js') }}"></script>
 {% endblock %}

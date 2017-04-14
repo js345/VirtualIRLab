@@ -73,7 +73,7 @@ function submit(){
 		"dataset" : "test",
 		"doc":documents,
 		"query":search_result.query,
-		"user":"li"
+		"user":"liu"
 	}
 	console.log(package);
 }
