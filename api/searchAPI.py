@@ -9,7 +9,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('query', type=str)
 parser.add_argument('ranker', type=str)
 parser.add_argument('num_results', type=int)
-parser.add_argument('params', type=dict)
+parser.add_argument('params', type=str)
 
 
 class SearchAPI(Resource):
@@ -26,9 +26,12 @@ class SearchAPI(Resource):
         num_results = args['num_results']
         params = args['params']
         headers = {'Content-Type': 'text/html'}
-        print(params)
-        # To do: check for invalid access here
-        # ds = DataSet.objects(author=author, ds_name=ds_name)
+
+        p = params.replace('"','').replace('::',':').replace(': :', ':').strip('{').strip('}').split(',')
+        params = {}
+        for i in p:
+            templist = i.split(':')
+            params[templist[0]] = int(templist[1])
 
         path = current_app.root_path + "/data/" + author
         searcher = Searcher(author, ds_name, path)

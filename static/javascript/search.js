@@ -1,10 +1,11 @@
 $("#search").click(function(){
 	search(create_search_package());
+	console.log("1");
 });
 
 
 $("#search-algorithms").change(function(){
-	console.log($("#search-algorithms").val());
+//	console.log($("#search-algorithms").val());
 	update_para($("#search-algorithms").val())
 });
 
@@ -51,14 +52,16 @@ function create_search_package(){
 		var param_name = $(this).find("label").html();
 		var param_val = $(this).find("input").val();
 		params[param_name] = param_val;
+//		console.log(params);
 	});
+
 
 	return {
 		"url": url_,
 		"ranker": ranker,
 		"query": query,
 		"num_results": num_results,
-		"params": params
+		"params": JSON.stringify(params)
 	};
 }
 
@@ -73,7 +76,8 @@ function update_para(algo){
             "<label>" + param + ": </label>" +
             "<input type='number' name=''></div>"
 	});
-	console.log(html);
+//	console.log(html);
+//console.log('1');
 
 	$(".para-box").html(html);
 }
