@@ -43,13 +43,11 @@ class Searcher:
         q.content(query)
         # print(params)
         try:
-            ranker_cls = getattr(metapy.index, ranker_name)
-            for key in params:
-                setattr(ranker_cls, str(key), float(params[key]))
-            ranker = ranker_cls()
+            ranker = getattr(metapy.index, ranker_name)(**params)
         except Exception as e:
             print("Couldn't make '{}' ranker, using default.".format(ranker_name))
             ranker = self.default_ranker
+            
         response = {'query': query, 'results': []}
         for result in ranker.score(self.idx, q, num_results):
             response['results'].append({
