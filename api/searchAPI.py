@@ -9,10 +9,12 @@ parser = reqparse.RequestParser()
 parser.add_argument('query', type=str)
 parser.add_argument('ranker', type=str)
 parser.add_argument('num_results', type=int)
-parser.add_argument('params', type=dict)
+parser.add_argument('params', type=str)
 
 
 class SearchAPI(Resource):
+    def serialize(self, params):
+        return params
 
     def get(self, author, ds_name):
         args = parser.parse_args()
@@ -24,7 +26,7 @@ class SearchAPI(Resource):
         query = args['query']
         ranker = args['ranker']
         num_results = args['num_results']
-        params = args['params']
+        params = self.serialize(args['params'])
         headers = {'Content-Type': 'text/html'}
         print(params)
         # To do: check for invalid access here

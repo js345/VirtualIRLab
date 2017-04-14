@@ -44,13 +44,15 @@ function create_search_package(){
 	var query = $("#query_text").val();
 	var url_ = "/search/dev/testdata";
 	var ranker = $("#search-algorithms").val();
-	var params = {};
+	var params = "";
 	var num_results = 5;
 
 	$(".para-box").children(".input-group").each(function(){
 		var param_name = $(this).find("label").html();
+		param_name = param_name.substring(0, param_name.length - 1);
 		var param_val = $(this).find("input").val();
-		params[param_name] = param_val;
+		param_val = parseFloat(param_val);
+		params += param_name + ":" + param_val + ",";
 	});
 
 	return {
@@ -58,7 +60,7 @@ function create_search_package(){
 		"ranker": ranker,
 		"query": query,
 		"num_results": num_results,
-		"params": params
+		"params": params.substring(0, params.length-1)
 	};
 }
 
