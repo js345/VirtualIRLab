@@ -10,7 +10,6 @@ parser = reqparse.RequestParser()
 parser.add_argument('user', type=str)
 parser.add_argument('dataset', type=str)
 #parser.add_argument('Query', type=str)
-
 parser.add_argument('doc', type=str)
 
 
