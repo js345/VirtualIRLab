@@ -51,17 +51,29 @@ function upload(data){
 }
 
 function submit(){
-	var documents = [];
+	var documents = "";
 
 	search_result.results.forEach(function(doc){
 		var judge = document.getElementById(doc.doc_id).checked;
-		documents.push({"doc_id":doc.doc_id,"judge": judge});
+		// documents.push({"doc_id":doc.doc_id,"judge": judge});
+		documents += "doc_id:"+doc.doc_id+",judge:"+judge+";";
 	});
+	documents = documents.substring(0,documents.length-1);
 
 	var package = {
 		"dataset" : "test",
-		"doc":documents,
-		"query":search_result.query,
+		"doc": documents,
+		"query": search_result.query,
 		"user":"liu"
 	}
+	$.ajax({
+		type: "POST",
+		url: "/annotation",
+		dataType: "json",
+		data: package
+	})
+	.success(function(data){
+		alert(data);
+	});
+
 }

@@ -41,8 +41,12 @@ class Searcher:
         start = time.time()
         q = metapy.index.Document()
         q.content(query)
+        # print(params)
         try:
-            ranker = getattr(metapy.index, ranker_name)(**params)
+            ranker_cls = getattr(metapy.index, ranker_name)
+            for key in params:
+                setattr(ranker_cls, str(key), float(params[key]))
+            ranker = ranker_cls()
         except Exception as e:
             print("Couldn't make '{}' ranker, using default.".format(ranker_name))
             ranker = self.default_ranker

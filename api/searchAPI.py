@@ -14,7 +14,12 @@ parser.add_argument('params', type=str)
 
 class SearchAPI(Resource):
     def serialize(self, params):
-        return params
+        ret = {}
+        params = params.split(",")
+        for param in params:
+            key_value = param.split(":")
+            ret[key_value[0]] = float(key_value[1])
+        return ret
 
     def get(self, author, ds_name):
         args = parser.parse_args()
@@ -29,8 +34,6 @@ class SearchAPI(Resource):
         params = self.serialize(args['params'])
         headers = {'Content-Type': 'text/html'}
         print(params)
-        # To do: check for invalid access here
-        # ds = DataSet.objects(author=author, ds_name=ds_name)
 
         path = current_app.root_path + "/data/" + author
         searcher = Searcher(author, ds_name, path)

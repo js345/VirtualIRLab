@@ -16,7 +16,6 @@ parser.add_argument('doc', type=str)
 class AnnotationAPI(Resource):
     def serialize(self, docs):
         docs = docs.split(";")
-        docs = docs[:len(docs)-1]
         documents = []
 
         for doc in docs:
@@ -35,7 +34,7 @@ class AnnotationAPI(Resource):
         #query = args['query']
         user = args['user']
         data_id = args['dataset']
-        docs = serialize(args['doc'])
+        documents = self.serialize(args['doc'])
 
         headers = {'Content-Type': 'application/json'}
         annotator = User.objects(name = user)
