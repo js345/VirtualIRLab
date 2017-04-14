@@ -11,7 +11,7 @@ $("#search-algorithms").change(function(){
 
 function render_result(data){
 	var html = "";
-
+	
 	data.results.forEach(function(doc){
 		html += "<tr><td>" +
             "<div class='container-fluid result'>" +

@@ -6,11 +6,11 @@ function search(search_package){
 		"num_results":search_package['num_results'],
 		"params":search_package['params']
 	};
-
+	console.log(search_package['url']);
 	$.ajax({
 		type: "POST",
 		url: search_package['url'],
-		data: data,
+		data: data
 	})
 	.success(function(data){
 		console.log(data);

@@ -7,9 +7,9 @@ from schema.DataSet import DataSet
 from schema.Query import Query
 
 parser = reqparse.RequestParser()
-parser.add_argument('User', type=str)
-parser.add_argument('DataSet', type=str)
-parser.add_argument('Query', type=str)
+parser.add_argument('user', type=str)
+parser.add_argument('dataset', type=str)
+#parser.add_argument('Query', type=str)
 parser.add_argument('doc', type=dict, action="append")
 
 
@@ -17,18 +17,18 @@ class AnnotationAPI(Resource):
 
     def post(self):
         args = parser.parse_args()
-        query = args['Query']
-        user = args['User']
-        data_id = args['DataSet']
+        query = args['query']
+        user = args['user']
+        data_id = args['dataset']
         doc = args['doc']
         headers = {'Content-Type': 'application/json'}
         annotator = User.objects(name = user)
         ds = DataSet.objects(ds_name = data_id)
-        q_id = Query.objects(id = query)
+        #q_id = Query.objects(id = query)
         for pair in doc:
             annotation = Annotation()
             annotation.annotator = annotator
-            annotation.query = q_id
+            #annotation.query = q_id
             annotation.data_set = ds
             annotation.doc = pair['doc_id']
             annotation.judgement = bool(pair['judge'])

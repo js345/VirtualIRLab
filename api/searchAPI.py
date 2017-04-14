@@ -26,6 +26,7 @@ class SearchAPI(Resource):
         num_results = args['num_results']
         params = args['params']
         headers = {'Content-Type': 'text/html'}
+        print(params)
         # To do: check for invalid access here
         # ds = DataSet.objects(author=author, ds_name=ds_name)
 
