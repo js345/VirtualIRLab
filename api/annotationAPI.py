@@ -9,8 +9,8 @@ import json
 parser = reqparse.RequestParser()
 parser.add_argument('user', type=str)
 parser.add_argument('dataset', type=str)
-#parser.add_argument('Query', type=str)
-parser.add_argument('doc', type=str)
+parser.add_argument('query', type=str)
+parser.add_argument('doc', type=dict, action="append")
 
 
 class AnnotationAPI(Resource):
@@ -18,31 +18,18 @@ class AnnotationAPI(Resource):
     def post(self):
         
         args = parser.parse_args()
-        #query = args['query']
+        query = args['query']
         user = args['user']
         data_id = args['dataset']
-        docs = args['doc']
-        docs = docs.split(";")
-        docs = docs[:len(docs)-1]
-        documents = []
-
-        for doc in docs:
-            params = doc.split(",")
-            document = {}
-            for param in params:
-                key_value = param.split(":")
-                document[key_value[0]] = key_value[1]
-            documents.append(document)
-
+        doc = args['doc']
         headers = {'Content-Type': 'application/json'}
-        annotator = User.objects(name = user)
-        ds = DataSet.objects(ds_name = data_id)
- 
-        #q_id = Query.objects(id = query)
-        for pair in documents:
+        annotator = User.objects(id = user)
+        ds = DataSet.objects(id = data_id)
+        q_id = Query.objects(id = query)
+        for pair in doc:
             annotation = Annotation()
             annotation.annotator = annotator[0]
-            #annotation.query = q_id
+            annotation.query = q_id[0]
             annotation.data_set = ds[0]
             annotation.doc = pair['doc_id']
             annotation.judgement = (pair['judge'] == "true")
