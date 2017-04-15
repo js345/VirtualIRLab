@@ -10,7 +10,6 @@ from api.assignmentAPI import AssignmentAPI, AddQueryAPI
 
 from util.exception import InvalidUsage
 
-
 from flask import render_template
 
 app = Flask(__name__, static_folder='static/', static_url_path='')
@@ -20,7 +19,6 @@ CORS(app)
 
 db.init_app(app)
 redis_store.init_app(app)
-
 
 api.add_resource(SearchAPI, '/search/<string:author>/<string:ds_name>')
 api.add_resource(AnnotationAPI, '/annotation')
@@ -33,9 +31,9 @@ api.add_resource(AddQueryAPI, '/newquery')
 
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
-    response = jsonify(error.to_dict())
-    response.status_code = error.status_code
-    return response
+	response = jsonify(error.to_dict())
+	response.status_code = error.status_code
+	return response
 
 
 @app.route("/instructor")
@@ -47,5 +45,6 @@ def instructor_page():
 def upload_file():
 	return render_template("upload_file.html")
 
+
 if __name__ == '__main__':
-    app.run(host='127.0.0.1')
+	app.run(host='127.0.0.1')

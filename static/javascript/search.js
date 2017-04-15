@@ -5,7 +5,6 @@ $("#search").click(function(){
 
 
 $("#search-algorithms").change(function(){
-//	console.log($("#search-algorithms").val());
 	update_para($("#search-algorithms").val())
 });
 
@@ -51,8 +50,7 @@ function create_search_package(){
 	$(".para-box").children(".input-group").each(function(){
 		var param_name = $(this).find("label").html();
 		var param_val = $(this).find("input").val();
-		params[param_name] = param_val;
-//		console.log(params);
+		params[param_name] = parseFloat(param_val);
 	});
 
 
@@ -73,11 +71,9 @@ function update_para(algo){
 
 	params.forEach(function(param){
 		html += "<div id='" + param + "' class='input-group'>" +
-            "<label>" + param + ":</label>" +
+            "<label>" + param + "</label>" +
             "<input type='number' name=''></div>"
 	});
-//	console.log(html);
-//console.log('1');
 
 	$(".para-box").html(html);
 }

@@ -1,6 +1,6 @@
 
 function search(search_package){
-	data = {
+	var data = {
 		"ranker":search_package['ranker'],
 		"query":search_package['query'],
 		"num_results":search_package['num_results'],
@@ -15,7 +15,6 @@ function search(search_package){
 		contentType: 'application/json; charset=utf-8'
 	})
 	.success(function(data){
-		console.log(data);
 		render_result(data);
 	});
 }
