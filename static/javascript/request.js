@@ -9,8 +9,10 @@ function search(search_package){
 	console.log(search_package['url']);
 	$.ajax({
 		type: "POST",
+		dataType: 'json',
 		url: search_package['url'],
-		data: data
+		data: JSON.stringify(data),
+		contentType: 'application/json; charset=utf-8'
 	})
 	.success(function(data){
 		console.log(data);

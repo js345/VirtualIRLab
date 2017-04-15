@@ -61,7 +61,7 @@ function create_search_package(){
 		"ranker": ranker,
 		"query": query,
 		"num_results": num_results,
-		"params": JSON.stringify(params)
+		"params": params
 	};
 }
 
@@ -72,8 +72,8 @@ function update_para(algo){
 	var html = ""
 
 	params.forEach(function(param){
-		html += "<div id='" + param + "' class='input-group'>" + 
-            "<label>" + param + ": </label>" +
+		html += "<div id='" + param + "' class='input-group'>" +
+            "<label>" + param + ":</label>" +
             "<input type='number' name=''></div>"
 	});
 //	console.log(html);

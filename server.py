@@ -6,6 +6,7 @@ from api.searchAPI import SearchAPI
 from api.annotationAPI import AnnotationAPI
 from api.uploadAPI import UploadAPI
 from api.userAPI import UserAPI, LoginAPI
+from api.assignmentAPI import AssignmentAPI, AddQueryAPI
 
 from util.exception import InvalidUsage
 
@@ -26,6 +27,8 @@ api.add_resource(AnnotationAPI, '/annotation')
 api.add_resource(UploadAPI, '/upload')
 api.add_resource(UserAPI, '/register')
 api.add_resource(LoginAPI, '/login')
+api.add_resource(AssignmentAPI, '/assign')
+api.add_resource(AddQueryAPI, '/newquery')
 
 
 @app.errorhandler(InvalidUsage)

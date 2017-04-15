@@ -9,7 +9,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('query', type=str)
 parser.add_argument('ranker', type=str)
 parser.add_argument('num_results', type=int)
-parser.add_argument('params', type=str)
+parser.add_argument('params', type=dict)
 
 
 class SearchAPI(Resource):
@@ -27,11 +27,9 @@ class SearchAPI(Resource):
         params = args['params']
         headers = {'Content-Type': 'text/html'}
 
-        p = params.replace('"','').replace('::',':').replace(': :', ':').strip('{').strip('}').split(',')
-        params = {}
-        for i in p:
-            templist = i.split(':')
-            params[templist[0]] = int(templist[1])
+        # print(params)
+        for i in params:
+            params[i] = float(params[i])
 
         path = current_app.root_path + "/data/" + author
         searcher = Searcher(author, ds_name, path)
