@@ -1,5 +1,6 @@
 from flask import make_response, render_template, current_app, jsonify
 from flask_restful import Resource, reqparse
+from util.userAuth import auth_required
 
 from schema.DataSet import DataSet
 
@@ -20,6 +21,18 @@ parser.add_argument('creator', type=str)
 
 
 class AssignmentAPI(Resource):
+    @auth_required
+
+    def get(self):
+        name_list = []
+        dataset = []
+        for i in User.objects:
+            if i.group == 1:
+                name_list.append(i.name)
+        for i in DataSet.objects:
+            dataset.append(i.ds_name)
+
+
     def post(self):
         headers = {'Content-Type': 'application/json'}
         args = parser.parse_args()
