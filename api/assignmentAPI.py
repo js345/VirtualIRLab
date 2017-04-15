@@ -24,13 +24,13 @@ class AssignmentAPI(Resource):
     @auth_required
 
     def get(self):
-        name_list = []
-        dataset = []
+        name_dict = {}
+        dataset = {}
         for i in User.objects:
             if i.group == 1:
-                name_list.append(i.name)
+                name_dict[i.id] = i.name
         for i in DataSet.objects:
-            dataset.append(i.ds_name)
+            dataset[i.id] = i.ds_name
 
 
     def post(self):
@@ -43,10 +43,10 @@ class AssignmentAPI(Resource):
         status = False
         annotator = args['annotator']
         instructor = args['instructor']
-        instructor = User.objects(name=instructor)
-        annotator = User.objects(name=annotator)
-        query = Query.objects(content=query)
-        dataset = DataSet.objects(ds_name=dataset)
+        instructor = User.objects(id=instructor)
+        annotator = User.objects(id=annotator)
+        query = Query.objects(id=query)
+        dataset = DataSet.objects(id=dataset)
         task = Assignment()
         task.query = query[0]
         task.ranker = ranker
@@ -66,8 +66,8 @@ class AddQueryAPI(Resource):
         content = args['content']
         dataset = args['dataset']
         creator = args['creator']
-        dataset = DataSet.objects(ds_name=dataset)
-        creator = User.objects(name=creator)
+        dataset = DataSet.objects(id=dataset)
+        creator = User.objects(id=creator)
         query = Query()
         query.content = content
         query.data_set = dataset[0]
