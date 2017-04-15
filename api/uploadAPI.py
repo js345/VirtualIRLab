@@ -1,4 +1,4 @@
-from flask import make_response, jsonify, current_app, request
+from flask import make_response, jsonify, current_app, request, render_template
 from flask_restful import Resource, reqparse
 from werkzeug.utils import secure_filename
 from util.utils import allowed_file
@@ -14,6 +14,13 @@ class UploadAPI(Resource):
 	"""
 	API class for data uploading and viewing
 	"""
+
+	def get(self):
+		"""
+		Render upload UI
+		"""
+		headers = {'Content-Type': 'text/html'}
+		return make_response(render_template('upload_file.html'), 200, headers)
 
 	def post(self):
 		"""
