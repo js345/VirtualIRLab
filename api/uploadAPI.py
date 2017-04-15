@@ -21,8 +21,8 @@ class UploadAPI(Resource):
 		using multipart/form data
 		"""
 		args = parser.parse_args()
-		author = request.form['author']
-		ds_name = request.form['ds_name']
+		author = args['author']
+		ds_name = args['ds_name']
 		path = current_app.root_path + "/data/" + author + "/" + ds_name + "/"
 		# To do: check validity of input
 		if os.path.isdir(path):
