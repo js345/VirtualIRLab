@@ -37,6 +37,14 @@ def handle_invalid_usage(error):
 	response.status_code = error.status_code
 	return response
 
+@app.route("/student")
+def student_page():
+	return render_template("student.html")
+
+@app.route("/index")
+def main():
+	return render_template("index.html")
+
 
 if __name__ == '__main__':
 	app.run(host='127.0.0.1')
