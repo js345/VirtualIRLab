@@ -1,0 +1,89 @@
+{% extends "content_layout.html" %}
+
+{% block content %}
+<div class="jumbotron">
+	<!-- css -->
+	<link href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet"/>
+
+	<h2>Welcome to CS410</h2>
+	<h3>Guoqiao</h3> 
+	<br>
+	<p>Sign up if you don't have an account</p>
+	<button class="btn btn-primary" data-toggle="modal" data-target="#login-modal" style="margin-top: 30px;">Login</button> 
+	<button class="btn btn-primary" data-toggle="modal" data-target="#signup-modal" style="margin-top: 30px;">Sign up</button> 
+
+	<div class="modal fade" id="login-modal" role="dialog" style="margin-top:100px;">
+	    <div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="border-bottom: none;">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h3 class="modal-title">Log in</h3>
+				</div>
+				<div class="modal-body">
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Email</label>
+				    <div class="col-sm-8">
+				      <input class="form-control" name="password" type="text">
+				    </div>
+				  </div>
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Password</label>
+				    <div class="col-sm-8">
+				      <input class="form-control" name="password" type="text">
+				    </div>
+				  </div>
+				</div>
+				<div class="modal-footer" style="border-top: none;">
+				  <button type="button" class="btn btn-primary" data-dismiss="modal">Log in</button>
+				  <button type="button" class="btn btn-primary" data-dismiss="modal">Forgot</button>
+				</div>
+			</div>
+		</div>
+	</div><!-- end of login modal -->
+
+	<div class="modal fade" id="signup-modal" role="dialog" style="margin-top:100px;">
+	    <div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="border-bottom: none;">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h3 class="modal-title">Sign Up</h3>
+				</div>
+				<div class="modal-body">
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Email</label>
+				    <div class="col-sm-8">
+				      <input class="form-control" name="password" type="text">
+				    </div>
+				  </div>
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Password</label>
+				    <div class="col-sm-8">
+				      <input class="form-control" name="password" type="text">
+				    </div>
+				  </div>
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Re-enter</label>
+				    <div class="col-sm-8">
+				      <input class="form-control" name="password" type="text">
+				    </div>
+				  </div>
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Role:</label>
+				    <div class="col-sm-8">
+				      <label><input type="radio" name="optradio"> Administrator</label>
+				      <label><input type="radio" name="optradio"> Instructor</label>
+				      <label><input type="radio" name="optradio"> Student</label>
+				    </div>
+				  </div>
+
+				</div>
+				<div class="modal-footer" style="border-top: none;">
+				  <button type="button" class="btn btn-primary" data-dismiss="modal">Sign Up</button>
+				</div>
+			</div>
+		</div>
+	</div><!-- end of login modal -->
+</div>
+{% endblock %}
