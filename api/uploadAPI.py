@@ -47,7 +47,7 @@ class UploadAPI(Resource):
 
 		# save new ds object
 		ds = DataSet()
-		ds.ds_name = ds_name
+		ds.name = ds_name
 		ds.author = author_name
 		ds.save()
 

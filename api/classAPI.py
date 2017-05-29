@@ -15,7 +15,6 @@ class ClassAPI(Resource):
                 headers = {'Content-Type': 'application/json'}
                 args = parser.parse_args()
                 instructor = args['instructor']
-                instructor = User.objects(name=instructor).first()
                 name = args['name']
                 password = args['password']
 

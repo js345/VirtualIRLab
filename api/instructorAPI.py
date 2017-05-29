@@ -1,6 +1,8 @@
 from flask import make_response, jsonify, current_app, request, render_template, session
 from flask_restful import Resource, reqparse
 from schema.User import User
+from schema.DataSet import DataSet
+from schema.Class import Class
 from schema import redis_store
 from util.userAuth import auth_required
 from util.exception import InvalidUsage
@@ -22,17 +24,22 @@ class InstructorAPI(Resource):
 		session['token'] = token
 
 		# get all ds
-		path = current_app.root_path + "/data/" + user.name
 		datasets = []
 
-		for directory in os.listdir(path):
-			datasets.append(directory)
+		for ds in DataSet.objects(author=user.name):
+			datasets.append(ds.name)
+
+		# get all classes
+		classes = []
+		for class_ in Class.objects(instructor=user.name):
+			classes.append(class_.name)
 
 		return make_response(render_template(
 			"instructor.html", 
 			data={
 					"user" : json.dumps(user.to_json()),
-					"datasets" : datasets
+					"datasets" : datasets,
+					"classes" : classes
 				}
 			), 200, headers)
 		

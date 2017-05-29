@@ -8,6 +8,13 @@
 	<script type="text/javascript">
 		user = {{data.user|tojson}};
 		user = JSON.parse(user);
+
+		classes = [];
+		{% for class_ in data.classes %}
+			classes.push("{{class_}}");
+		{% endfor %}
+		
+
 	</script>
 
 	<button id="nav-upload-btn" class="btn-lg btn-primary">Upload Dataset</button>
@@ -107,9 +114,9 @@
 				    <label class="col-sm-2 control-label col-sm-offset-1">Class</label>
 				    <div class="col-sm-8">
 				      <select id="assignment-class">
-						<option>CS410</option>
-						<option>CS598</option>
-						<option>CS412</option>
+				      	{% for class_ in data.classes %}
+						<option>{{class_}}</option>
+						{% endfor %}
 				      </select>
 				    </div>
 				  </div>
