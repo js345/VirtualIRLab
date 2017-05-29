@@ -10,7 +10,7 @@ from schema.Assignment import Assignment
 
 parser = reqparse.RequestParser()
 parser.add_argument('instructor', type=str)
-parser.add_argument('annotator', type=str)
+parser.add_argument('class', type=str)
 parser.add_argument('dataset', type=str)
 parser.add_argument('query', type=str)
 parser.add_argument('ranker', type=str)
@@ -22,7 +22,6 @@ parser.add_argument('creator', type=str)
 
 class AssignmentAPI(Resource):
     @auth_required
-
     def get(self):
         name_dict = {}
         dataset = {}
@@ -41,10 +40,10 @@ class AssignmentAPI(Resource):
         params = args['params']
         dataset = args['dataset']
         status = False
-        annotator = args['annotator']
+        class_ = args['class']
         instructor = args['instructor']
         instructor = User.objects(id=instructor)
-        annotator = User.objects(id=annotator)
+        class_ = Class.objects(id=class_)
         query = Query.objects(id=query)
         dataset = DataSet.objects(id=dataset)
         task = Assignment()
@@ -53,7 +52,7 @@ class AssignmentAPI(Resource):
         task.params = str(params)
         task.dataset = dataset[0]
         task.status = status
-        task.annotator = annotator[0]
+        task.class_ = class_[0]
         task.instructor = instructor[0]
         task.save()
         return make_response(jsonify("succeed"), 200, headers)

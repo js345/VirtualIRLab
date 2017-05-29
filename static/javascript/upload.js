@@ -1,5 +1,10 @@
 var uploader_index = 0;
 
+$(document).ready(function(){
+	// update author name
+	$("#author-input").val(window.localStorage.getItem("username"));
+});
+
 
 $("#upload-btn").click(function(){
 	$("#files").click();
@@ -38,7 +43,7 @@ $("#files").change(function(){
 
 $("#submit-btn").click(function(){	
 	var formData = new FormData($("#files-form")[0]);
-
+	formData.author = window.localStorage.getItem("username");
     $.ajax({
         url: "/upload",
         type: 'POST',

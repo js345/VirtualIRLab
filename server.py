@@ -8,6 +8,7 @@ from api.uploadAPI import UploadAPI
 from api.userAPI import UserAPI, LoginAPI
 from api.assignmentAPI import AssignmentAPI, AddQueryAPI
 from api.instructorAPI import InstructorAPI
+from api.classAPI import ClassAPI
 
 from util.exception import InvalidUsage
 
@@ -29,6 +30,7 @@ api.add_resource(LoginAPI, '/login')
 api.add_resource(AssignmentAPI, '/assign')
 api.add_resource(AddQueryAPI, '/newquery')
 api.add_resource(InstructorAPI, '/instructor')
+api.add_resource(ClassAPI, '/class')
 
 
 @app.errorhandler(InvalidUsage)

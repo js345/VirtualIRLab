@@ -6,9 +6,10 @@ from itsdangerous import (TimedJSONWebSignatureSerializer
 
 class User(db.DynamicDocument):
     name = db.StringField(required=True, unique=True)
-    group = db.IntField(required=True)
+    group = db.StringField(required=True)
     password_hash = db.StringField(required=True)
     email = db.StringField(required=True, unique=True)
+    assignments = db.ListField(db.ReferenceField('Assignment'))
 
     def hash_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -19,3 +20,11 @@ class User(db.DynamicDocument):
     def generate_auth_token(self):
         s = Serializer(current_app.config.get('SECRET_KEY'),expires_in=99999)
         return s.dumps(str(self.id))
+
+    def to_json(self):
+        return {
+            "name": self.name,
+            "group": self.group,
+            "email": self.email,
+            "id": str(self.id)
+        }
