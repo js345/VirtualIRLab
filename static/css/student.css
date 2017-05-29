@@ -1,0 +1,65 @@
+a {
+	text-decoration: none;
+	color: white;
+}
+
+a:hover{
+	text-decoration: none;
+	color: white;
+}
+
+
+.container{
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	background-color: #000;
+}
+
+.content{
+	height: 800px;
+	background-color: #fff;
+}
+
+
+/*side bar*/
+.side-bar{
+	height: 800px;
+	background-color: #dddddd;
+	border-radius: 2px;
+}
+
+.side-bar-list{
+	width: 100%;
+	padding: 10px 10px;
+}
+
+.side-bar-list .main-bullet{
+	color: #000;
+	font-size: 24px;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+.sub-bullets-container{
+	display: none;
+}
+
+.side-bar-list .sub-bullet{
+	color: #000;
+	font-size: 18px;
+	margin-top: 5px;
+	font-family: normal;
+}
+
+
+
+
+/*assignment content*/
+.assignment-info{
+	color: black;
+}
+
+.important{
+	color: #ff0000;
+}

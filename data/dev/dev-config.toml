@@ -1,7 +1,7 @@
-index = "-idx"
+index = "dev-idx"
 prefix = "."
 corpus = "file.toml"
-dataset = ""
+dataset = "dev"
 
 [[analyzers]]
 ngram = 1

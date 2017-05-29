@@ -3,23 +3,25 @@
 	<link href="{{ url_for('static', filename='css/upload.css') }}" rel="stylesheet"/>
 
 	<div class="container-fluid uploader-container">
-		<button class="btn-lg btn-primary btn-block">Upload Dataset</button>
-		<table class="table table-hover">
-			<tbody>
-				<tr><td>
-					Dataset1
-				</td></tr>
-				<tr><td>
-					Dataset1
-				</td></tr>
-				<tr><td>
-					Dataset1
-				</td></tr>
-			</tbody>
-		</table>
+		<button id="submit-btn" class="btn-lg btn-primary btn-block">Upload Dataset</button>
+		
+		<form id="files-form" action="/upload" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+
+		<div id="dataset-input" class="row">
+			<label>DataSet Name:</label>
+			<input type="text" name="ds_name">
+		</div>
+
+			<div class="container-fluid files-container">
+			</div>
+			<input id="files" name="file" multiple="" type="file" style="display: none">
+			<input id="author-input" type="text" name="author" value="dev" style="display: none">
+			<input id="hidden-submit-btn" type="submit" style="display: none">
+		</form>
+
 		<div class="row my-btn-group">
 			<div class="col-md-4">
-				<button class="btn btn-primary btn-block">Upload</button>
+				<button id="upload-btn" class="btn btn-primary btn-block">Upload</button>
 			</div>
 			<div class="col-md-4">
 				<button class="btn btn-primary btn-block">Select All</button>
@@ -29,4 +31,5 @@
 			</div>
 		</div>
 	</div>
+	<script src="{{ url_for('static', filename='javascript/upload.js') }}"></script>
 {% endblock %}

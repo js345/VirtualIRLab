@@ -1,24 +1,53 @@
 {% extends "content_layout.html" %}
 
 {% block content %}
-<div class="container">
-	<button class="btn-lg btn-primary">Upload Dataset</button>
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/instructor.css')}}">
+<script type="text/javascript" src="{{url_for('static', filename='javascript/instructor.js')}}"></script>
+
+<div class="container" onload="setup_info('abc')">
+	<script type="text/javascript">
+		user = {{data.user|tojson}};
+		user = JSON.parse(user);
+
+		classes = [];
+		{% for class_ in data.classes %}
+			classes.push("{{class_}}");
+		{% endfor %}
+		
+
+	</script>
+
+	<button id="nav-upload-btn" class="btn-lg btn-primary">Upload Dataset</button>
+	<button class="btn-lg btn-primary" data-toggle="modal" data-target="#create-class-modal">Create Class</button>
 
 	<br>
 	<br>
-	<h1>History</h1>
+	<h1>Assignments</h1>
 	<br>
 
 	<ul class="nav nav-tabs">
-		<li class="active"><a data-toggle="tab" href="#upcoming">Upcoming</a></li>
+		<li class="active"><a data-toggle="tab" href="#assign">Assign</a></li>
 		<li><a data-toggle="tab" href="#waiting">Waiting</a></li>
 		<li><a data-toggle="tab" href="#history">History</a></li>
 	</ul>
 
 	<div class="tab-content">
-		<div id="upcoming" class="tab-pane fade in active">
-		  <h3>UPCOMING</h3>
-		  <p>Upcoming events</p>
+		<div id="assign" class="tab-pane fade in active">
+		  <h3 style="margin-bottom: 20px;">Assign</h3>
+		  {% for dataset in data.datasets %}
+		  		<div class="ds-container">
+		  			<div class="ds-select-container">
+						<input class="ds-checkbox" type="radio" name="data_set" value="{{dataset.id}}">
+						<p class="dataset-name">{{dataset.name}}</p><span data-toggle="collapse" data-target="#{{dataset}}" style="height: 20px;" class="glyphicon glyphicon-triangle-right"></span>
+					</div>
+					<div id="{{dataset}}" class="collapse" style=" margin-left: 22px;">Description:</div>
+				</div>
+		  {% endfor %}
+
+		  <div id="btn-container">
+			  <button class="btn-primary btn" data-toggle="modal" data-target="#assign-modal">Assign</button>
+			  <button id="assign-select-all" class="btn-primary btn">Select All</button>
+		  </div>
 		</div>
 		<div id="waiting" class="tab-pane fade">
 		  <h3>Waiting</h3>
@@ -29,5 +58,116 @@
 		  <p>History events</p>
 		</div>
 	</div>
+
+
+	<!-- modals -->
+
+	<!-- create class modal -->
+	<div class="modal fade" id="create-class-modal" role="dialog" style="margin-top:100px;">
+	    <div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="border-bottom: none;">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h3 class="modal-title">Create Class</h3>
+				</div>
+				<div class="modal-body">
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">ClassName</label>
+				    <div class="col-sm-8">
+				      <input id="class-name" class="form-control" type="text">
+				    </div>
+				  </div>
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Password</label>
+				    <div class="col-sm-8">
+				      <input id="class-password" class="form-control" type="password" placeholder="Optional...">
+				    </div>
+				  </div>
+				</div>
+				<div class="modal-footer" style="border-top: none;">
+				  <button id="create-class-btn" type="button" class="btn btn-primary" data-dismiss="modal">Create</button>
+				  <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div><!-- end of class modal -->
+	
+	<!-- assign modal -->
+	<div class="modal fade" id="assign-modal" role="dialog" style="margin-top:100px;">
+	    <div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="border-bottom: none;">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h3 class="modal-title">Assign</h3>
+				</div>
+				<div class="modal-body">
+	
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Query</label>
+				    <div class="col-sm-8">
+				      <input id="assignment-query" class="form-control" type="text">
+				    </div>
+				  </div>
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Class</label>
+				    <div class="col-sm-8">
+				      <select id="assignment-class">
+				      	{% for class_ in data.classes %}
+						<option>{{class_}}</option>
+						{% endfor %}
+				      </select>
+				    </div>
+				  </div>
+					
+				  <!-- ranker -->
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Ranker</label>
+				    <div class="col-sm-8">
+				      <select id="assignment-ranker">
+						<option value="OkapiBM25">OkapiBM25</option>
+						<option value="JelinekMercer">JelinekMercer</option>
+						<option value="DirichletPrior">DirichletPrior</option>
+						<option value="AbsoluteDiscount">AbsoluteDiscount</option>
+						<option value="PivotedLength">PivotedLength</option>
+				      </select>
+				    </div>
+				  </div>
+
+				  <!-- params -->
+				  <div id="assignment-params">
+					  <div class="row">
+					    <label class="col-sm-2 control-label col-sm-offset-1">Params</label>
+					    <div class="col-sm-8">
+					      <input id="param-k1" type="text" placeholder="k1">
+					    </div>
+					  </div>
+
+					  <div class="row">
+					    <label class="col-sm-2 control-label col-sm-offset-1"> </label>
+					    <div class="col-sm-8">
+					      <input id="param-b" type="text" placeholder="b">
+					    </div>
+					  </div>
+
+					  <div class="row">
+					    <label class="col-sm-2 control-label col-sm-offset-1"> </label>
+					    <div class="col-sm-8">
+					      <input id="param-k3" type="text" placeholder="k3">
+					    </div>
+					  </div>
+				  </div>
+				</div>
+
+				<div class="modal-footer" style="border-top: none;">
+				  <button id="create-assignment-btn" type="button" class="btn btn-primary" data-dismiss="modal">Create</button>
+				  <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div><!-- end of class modal -->
+
+	<!-- end of modals -->
 </div>
 {% endblock %}

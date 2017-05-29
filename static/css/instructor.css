@@ -1,0 +1,41 @@
+.ds-container{
+	margin-left: 20px;
+	margin-top: 10px;
+	display: block;
+}
+
+
+.ds-select-container{
+	display: block;
+	/*height: 30px;*/
+}
+
+.ds-select-container input{
+	float: left;
+	height: 20px;
+	margin: 0px;
+}
+
+.ds-select-container .dataset-name{
+	float: left;
+	margin-left: 10px;
+	line-height: 20px;
+}
+
+#btn-container{
+	margin-top: 20px;
+}
+
+
+/*modal*/
+.modal-body .form-group{
+	margin-top: 5px;
+}
+
+.modal-body label{
+	line-height: 30px;
+}
+
+.modal-body .form-control{
+	height: 30px;
+}
