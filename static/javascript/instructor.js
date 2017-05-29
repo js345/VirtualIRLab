@@ -50,6 +50,7 @@ $(document).ready(function(){
 
 		for(var i = 0; i < search_algorithms[ranker].length; i++){
 			var p_id = "#param-" + search_algorithms[ranker][i];
+			console.log(p_id);
 			params[search_algorithms[ranker][i]] = $(p_id).val();
 		}
 
@@ -62,8 +63,19 @@ $(document).ready(function(){
 			"params" : params
 		};
 
-		// send data 
+		console.log(data);
 
+		// send data 
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: "/assign",
+			data: JSON.stringify(data),
+			contentType: 'application/json; charset=utf-8'
+		})
+		.success(function(data){
+
+		});
 	});
 
 	// select all clicked 

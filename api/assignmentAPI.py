@@ -39,22 +39,36 @@ class AssignmentAPI(Resource):
         ranker = args['ranker']
         params = args['params']
         dataset = args['dataset']
-        status = False
         class_ = args['class']
         instructor = args['instructor']
+
         instructor = User.objects(id=instructor)
         class_ = Class.objects(id=class_)
-        query = Query.objects(id=query)
         dataset = DataSet.objects(id=dataset)
-        task = Assignment()
-        task.query = query[0]
-        task.ranker = ranker
-        task.params = str(params)
-        task.dataset = dataset[0]
-        task.status = status
-        task.class_ = class_[0]
-        task.instructor = instructor[0]
-        task.save()
+
+        # serialize params
+        serialized_params = ""
+        for key in params:
+            value = params[key]
+            serialized_params += key + ":" + value + ","
+        serialized_params = serialized_params[:-1]
+
+        # add assignment to each student in class
+        annotators = User.objects(class_=class_)
+
+        for annotator in annotators:
+            assignment = Assignment()
+            assignment.query = query
+            assignment.instructor = instructor
+            assignment.annotator = annotator
+            assignment.ranker = ranker
+            assignment.params = params
+            assignment.dataset = dataset
+            assignment.status = False
+            assignment.view_status = False
+            assignment.save()
+
+            
         return make_response(jsonify("succeed"), 200, headers)
 
 

@@ -27,7 +27,7 @@ class InstructorAPI(Resource):
 		datasets = []
 
 		for ds in DataSet.objects(author=user.name):
-			datasets.append(ds.name)
+			datasets.append({"id":ds.id, "name":ds.name})
 
 		# get all classes
 		classes = []

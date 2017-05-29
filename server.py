@@ -32,7 +32,6 @@ api.add_resource(AddQueryAPI, '/newquery')
 api.add_resource(InstructorAPI, '/instructor')
 api.add_resource(ClassAPI, '/class')
 
-
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
 	response = jsonify(error.to_dict())

@@ -37,8 +37,8 @@
 		  {% for dataset in data.datasets %}
 		  		<div class="ds-container">
 		  			<div class="ds-select-container">
-						<input class="ds-checkbox" type="radio" name="data_set" value="{{dataset}}">
-						<p class="dataset-name">{{dataset}}</p><span data-toggle="collapse" data-target="#{{dataset}}" style="height: 20px;" class="glyphicon glyphicon-triangle-right"></span>
+						<input class="ds-checkbox" type="radio" name="data_set" value="{{dataset.id}}">
+						<p class="dataset-name">{{dataset.name}}</p><span data-toggle="collapse" data-target="#{{dataset}}" style="height: 20px;" class="glyphicon glyphicon-triangle-right"></span>
 					</div>
 					<div id="{{dataset}}" class="collapse" style=" margin-left: 22px;">Description:</div>
 				</div>
@@ -140,21 +140,21 @@
 					  <div class="row">
 					    <label class="col-sm-2 control-label col-sm-offset-1">Params</label>
 					    <div class="col-sm-8">
-					      <input type="text" placeholder="k1">
+					      <input id="param-k1" type="text" placeholder="k1">
 					    </div>
 					  </div>
 
 					  <div class="row">
 					    <label class="col-sm-2 control-label col-sm-offset-1"> </label>
 					    <div class="col-sm-8">
-					      <input type="text" placeholder="b">
+					      <input id="param-b" type="text" placeholder="b">
 					    </div>
 					  </div>
 
 					  <div class="row">
 					    <label class="col-sm-2 control-label col-sm-offset-1"> </label>
 					    <div class="col-sm-8">
-					      <input type="text" placeholder="k3">
+					      <input id="param-k3" type="text" placeholder="k3">
 					    </div>
 					  </div>
 				  </div>
