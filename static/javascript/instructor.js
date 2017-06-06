@@ -7,6 +7,10 @@ var assignments;
 
 
 $(document).ready(function(){
+	$('[data-toggle="tooltip"]').tooltip(); 
+
+	$("#assignment-deadline").datepicker();
+
 	$("#nav-upload-btn").click(function(){
 		// set user_name
 		window.localStorage.setItem("username", user.name);
@@ -41,11 +45,12 @@ $(document).ready(function(){
 	// new assignment
 	$("#create-assignment-btn").click(function(){
 		// form data
+		var name = $("#assignment-name").val();
 		var query = $("#assignment-query").val();
 		var class_ = $("#assignment-class").val();
 		var ds = $('input[name="data_set"]:checked').val();
-		var instructor = window.localStorage.getItem("username");
 		var ranker = $("#assignment-ranker").val();
+		var deadline = $("#assignment-deadline").val();
 		var params = {};
 
 		for(var i = 0; i < search_algorithms[ranker].length; i++){
@@ -55,15 +60,14 @@ $(document).ready(function(){
 		}
 
 		var data = {
-			"instructor" : instructor,
+			"name" : name,
 			"query" : query,
 			"class" : class_,
 			"dataset" : ds,
 			"ranker" : ranker,
-			"params" : params
+			"params" : params,
+			"deadline" : deadline
 		};
-
-		console.log(data);
 
 		// send data 
 		$.ajax({
@@ -95,19 +99,36 @@ $(document).ready(function(){
 		html += "<div class='row'> \
 				    <label class='col-sm-2 control-label col-sm-offset-1'>Params</label> \
 				    <div class='col-sm-8'> \
-				      <input id='param-" + params[0] + "' type='text' placeholder='" + params[0] + "'> \
+				      <input class='form-control' id='param-" + params[0] + "' type='text' placeholder='" + params[0] + "'> \
 				    </div> \
 				  </div>"
 
 		for(var i = 1; i < params.length; i++){
 			html += "<div class='row'> \
-					    <label class='col-sm-2 control-label col-sm-offset-1'> </label> \
+					    <label class='col-sm-2 control-label col-sm-offset-1' style='color:#fff;'>s</label> \
 					    <div class='col-sm-8'> \
-					      <input id='param-" + params[i] + "' type='text' placeholder='" + params[i] + "'> \
+					      <input class='form-control' id='param-" + params[i] + "' type='text' placeholder='" + params[i] + "'> \
 					    </div> \
 					  </div>"
 		}
 
 		$("#assignment-params").html(html);
+	});
+
+
+	// update assignment
+	$(".assignment-update-btn").click(function(){
+		var id = $(this).attr("id");
+
+		$.ajax({
+			type: "GET",
+			dataType: "json",
+			url: "/assignment_update",
+			data: {'name': id}
+		})
+		.success(function(data){
+			// use the data to update modal
+			
+		});
 	});
 });

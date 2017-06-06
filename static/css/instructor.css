@@ -1,3 +1,7 @@
+p{
+	cursor: pointer;
+}
+
 .ds-container{
 	margin-left: 20px;
 	margin-top: 10px;
@@ -25,6 +29,22 @@
 #btn-container{
 	margin-top: 20px;
 }
+
+
+/*assignments*/
+#table-assignments{
+	width: 100%;
+}
+
+#table-assignments tr{
+	border-bottom: solid 1px #dddddd;
+}
+
+#table-assignments td{
+	padding-top: 10px;
+	padding-bottom: 5px;
+}
+
 
 
 /*modal*/

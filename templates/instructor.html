@@ -26,13 +26,15 @@
 	<br>
 
 	<ul class="nav nav-tabs">
-		<li class="active"><a data-toggle="tab" href="#assign">Assign</a></li>
-		<li><a data-toggle="tab" href="#waiting">Waiting</a></li>
+		<li class="active"><a data-toggle="tab" href="#tab-datasets">Datasets</a></li>
+		<li><a data-toggle="tab" href="#tab-assignments">Assignments</a></li>
 		<li><a data-toggle="tab" href="#history">History</a></li>
 	</ul>
 
-	<div class="tab-content">
-		<div id="assign" class="tab-pane fade in active">
+	
+	<div id="tabs" class="tab-content">
+
+		<div id="tab-datasets" class="tab-pane fade in active">
 		  <h3 style="margin-bottom: 20px;">Assign</h3>
 		  {% for dataset in data.datasets %}
 		  		<div class="ds-container">
@@ -49,10 +51,19 @@
 			  <button id="assign-select-all" class="btn-primary btn">Select All</button>
 		  </div>
 		</div>
-		<div id="waiting" class="tab-pane fade">
-		  <h3>Waiting</h3>
-		  <p>Waiting events</p>
+
+		<div id="tab-assignments" class="tab-pane fade">
+		  <h3>Assignments</h3>
+		  <table id="table-assignments">
+		  	{% for assignment in data.assignments %}
+		  	<tr>
+		  		<td><p>{{assignment.name}} <span data-toggle="tooltip" title="Number of students who haven't completed this assignment" class="label label-danger">{{assignment.incomplete_number}}</span></p></td>
+		  		<td><p class="assignment-update-btn" id="{{assignment.name}}" data-toggle="modal" data-target="#update-modal">Edit</p></td>
+		  	</tr>
+		  	{% endfor %}
+		  </table>
 		</div>
+
 		<div id="history" class="tab-pane fade">
 		  <h3>HISTORY</h3>
 		  <p>History events</p>
@@ -103,6 +114,14 @@
 				</div>
 				<div class="modal-body">
 	
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Name</label>
+				    <div class="col-sm-8">
+				      <input id="assignment-name" class="form-control" type="text">
+				    </div>
+				  </div>
+
 				  <div class="row">
 				    <label class="col-sm-2 control-label col-sm-offset-1">Query</label>
 				    <div class="col-sm-8">
@@ -140,25 +159,34 @@
 					  <div class="row">
 					    <label class="col-sm-2 control-label col-sm-offset-1">Params</label>
 					    <div class="col-sm-8">
-					      <input id="param-k1" type="text" placeholder="k1">
+					      <input class="form-control" id="param-k1" type="text" placeholder="k1">
 					    </div>
 					  </div>
 
 					  <div class="row">
-					    <label class="col-sm-2 control-label col-sm-offset-1"> </label>
+					    <label class="col-sm-2 control-label col-sm-offset-1" style="color:#fff;">s</label>
 					    <div class="col-sm-8">
-					      <input id="param-b" type="text" placeholder="b">
+					      <input class="form-control" id="param-b" type="text" placeholder="b">
 					    </div>
 					  </div>
 
 					  <div class="row">
-					    <label class="col-sm-2 control-label col-sm-offset-1"> </label>
+					    <label class="col-sm-2 control-label col-sm-offset-1" style="color:#fff;">s</label>
 					    <div class="col-sm-8">
-					      <input id="param-k3" type="text" placeholder="k3">
+					      <input class="form-control" id="param-k3" type="text" placeholder="k3">
 					    </div>
 					  </div>
 				  </div>
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Deadline</label>
+				    <div class="col-sm-8">
+				      <input type="text" class="form-control" id="assignment-deadline" placeholder="mm/dd/yy">
+				    </div>
+				  </div>
 				</div>
+
+
 
 				<div class="modal-footer" style="border-top: none;">
 				  <button id="create-assignment-btn" type="button" class="btn btn-primary" data-dismiss="modal">Create</button>
@@ -167,6 +195,98 @@
 			</div>
 		</div>
 	</div><!-- end of class modal -->
+
+
+	<!-- update modal -->
+	<div class="modal fade" id="update-modal" role="dialog" style="margin-top:100px;">
+	    <div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="border-bottom: none;">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h3 class="modal-title">Update Assignment</h3>
+				</div>
+				<div class="modal-body">
+	
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Name</label>
+				    <div class="col-sm-8">
+				      <input id="update-name" class="form-control" type="text">
+				    </div>
+				  </div>
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Query</label>
+				    <div class="col-sm-8">
+				      <input id="update-query" class="form-control" type="text">
+				    </div>
+				  </div>
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Class</label>
+				    <div class="col-sm-8">
+				      <select id="update-class">
+				      	{% for class_ in data.classes %}
+						<option>{{class_}}</option>
+						{% endfor %}
+				      </select>
+				    </div>
+				  </div>
+					
+				  <!-- ranker -->
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Ranker</label>
+				    <div class="col-sm-8">
+				      <select id="update-ranker">
+						<option value="OkapiBM25">OkapiBM25</option>
+						<option value="JelinekMercer">JelinekMercer</option>
+						<option value="DirichletPrior">DirichletPrior</option>
+						<option value="AbsoluteDiscount">AbsoluteDiscount</option>
+						<option value="PivotedLength">PivotedLength</option>
+				      </select>
+				    </div>
+				  </div>
+
+				  <!-- params -->
+				  <div id="update-params">
+					  <div class="row">
+					    <label class="col-sm-2 control-label col-sm-offset-1">Params</label>
+					    <div class="col-sm-8">
+					      <input class="form-control" id="param-k1" type="text" placeholder="k1">
+					    </div>
+					  </div>
+
+					  <div class="row">
+					    <label class="col-sm-2 control-label col-sm-offset-1" style="color:#fff;">s</label>
+					    <div class="col-sm-8">
+					      <input class="form-control" id="param-b" type="text" placeholder="b">
+					    </div>
+					  </div>
+
+					  <div class="row">
+					    <label class="col-sm-2 control-label col-sm-offset-1" style="color:#fff;">s</label>
+					    <div class="col-sm-8">
+					      <input class="form-control" id="param-k3" type="text" placeholder="k3">
+					    </div>
+					  </div>
+				  </div>
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Deadline</label>
+				    <div class="col-sm-8">
+				      <input type="text" class="form-control" id="update-deadline" placeholder="mm/dd/yy">
+				    </div>
+				  </div>
+				</div>
+
+
+
+				<div class="modal-footer" style="border-top: none;">
+				  <button id="update-assignment-btn" type="button" class="btn btn-primary">Update</button>
+				  <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
 
 	<!-- end of modals -->
 </div>

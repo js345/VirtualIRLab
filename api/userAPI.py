@@ -3,7 +3,6 @@ from flask_restful import Resource, reqparse
 from mongoengine.errors import NotUniqueError, ValidationError
 from schema.User import User
 from schema import redis_store
-from util.userAuth import auth_required
 from util.exception import InvalidUsage
 import json
 import Cookie
@@ -29,6 +28,7 @@ class UserAPI(Resource):
 
         user = User(name=name, email=email, group=group)
         user.hash_password(password)
+
         try:
             user.save()
         except ValidationError as e:

@@ -8,6 +8,10 @@ a:hover{
 	color: white;
 }
 
+.clickable-text{
+	cursor: pointer;
+}
+
 
 .container{
 	width: 100%;
@@ -16,9 +20,10 @@ a:hover{
 	background-color: #000;
 }
 
-.content{
+#content{
 	height: 800px;
 	background-color: #fff;
+	padding-top: 50px;
 }
 
 
@@ -56,6 +61,10 @@ a:hover{
 
 
 /*assignment content*/
+#content{
+	padding-top: 20px;
+}
+
 .assignment-info{
 	color: black;
 }
