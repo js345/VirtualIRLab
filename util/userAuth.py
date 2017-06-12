@@ -40,13 +40,14 @@ def login_auth_required(f):
 def instructor_auth_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        headers = {'Content-Type': 'text/html'}
         s = Serializer(current_app.config.get('SECRET_KEY'))
         token = session['token']
         user_id = s.loads(token)
         user = User.objects(id=user_id).first()
 
         if user.group != "instructor":
-            abort(401)
+            return make_response(render_template("index.html"),200,headers)
 
         return f(*args, **kwargs)
 
@@ -56,13 +57,14 @@ def instructor_auth_required(f):
 def annotator_auth_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        headers = {'Content-Type': 'text/html'}
         s = Serializer(current_app.config.get('SECRET_KEY'))
         token = session['token']
         user_id = s.loads(token)
         user = User.objects(id=user_id).first()
 
         if user.group != "annotator":
-            abort(401)
+            return make_response(render_template("index.html"),200,headers)
 
         return f(*args, **kwargs)
 

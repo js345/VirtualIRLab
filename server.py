@@ -35,7 +35,7 @@ api.add_resource(LoginAPI, '/login')
 api.add_resource(LogoutAPI, '/logout')
 
 api.add_resource(AssignAPI, '/assign')
-api.add_resource(AssignmentAPI, '/assignment/<string:instructor_id>/<string:assignment_name>')
+api.add_resource(AssignmentAPI, '/assignment/<string:instructor_name>/<string:assignment_name>')
 api.add_resource(AssignmentUpdateAPI, '/assignment_update')
 
 api.add_resource(InstructorAPI, '/instructor')

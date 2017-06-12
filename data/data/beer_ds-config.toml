@@ -1,0 +1,14 @@
+prefix = "."
+dataset = "beer_ds"
+corpus = "file.toml"
+index = "beer_ds-idx"
+
+[[analyzers]]
+ngram = 1
+method = "ngram-word"
+
+[[analyzers.filter]]
+type = "icu-tokenizer"
+
+[[analyzers.filter]]
+type = "lowercase"

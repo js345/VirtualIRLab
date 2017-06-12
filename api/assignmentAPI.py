@@ -72,10 +72,10 @@ class AssignAPI(Resource):
 
 
 class AssignmentAPI(Resource):
-    def get(self, assignment_name, instructor_id):
+    def get(self, instructor_name, assignment_name):
         headers = {'Content-Type': 'text/html'}
         args = parser.parse_args()
-        instructor = User.objects(id=instructor_id).first()
+        instructor = User.objects(name=instructor_name).first()
         user_id = session['user_id']
         user = User.objects(id=user_id).first()
 
@@ -83,9 +83,13 @@ class AssignmentAPI(Resource):
             .filter(instructor=instructor)  \
             .filter(annotator=user).first()
 
+        assignment.instructor_name = assignment.instructor.name
+        assignment.ds_name = assignment.dataset.name
+
         return make_response(
             render_template(
-                "assignment.html"
+                "assignment.html",
+                assignment = assignment
             ),
             200,headers)
 

@@ -30,7 +30,7 @@ class InstructorAPI(Resource):
 		# get all ds
 		datasets = []
 
-		for ds in DataSet.objects(author=user.name):
+		for ds in DataSet.objects(author=user):
 			datasets.append({"id":ds.id, "name":ds.name})
 
 		# get all classes

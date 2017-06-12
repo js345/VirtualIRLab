@@ -9,5 +9,6 @@ class LogoutAPI(Resource):
 		headers = {'Content-Type': 'text/html'}
 
 		session["token"] = None
+		session["user_id"] = None
 
 		return redirect("/index")

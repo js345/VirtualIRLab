@@ -5,7 +5,6 @@ from schema.User import User
 from schema import redis_store
 from util.exception import InvalidUsage
 import json
-import Cookie
 import os
 
 

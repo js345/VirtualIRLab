@@ -43,7 +43,6 @@ $("#files").change(function(){
 
 $("#submit-btn").click(function(){	
 	var formData = new FormData($("#files-form")[0]);
-	formData.author = window.localStorage.getItem("username");
     $.ajax({
         url: "/upload",
         type: 'POST',

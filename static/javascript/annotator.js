@@ -32,11 +32,11 @@ $(document).ready(function(){
 		$('#content-welcome').hide();
 		$("#content-assignment").show();
 
-		curr_assignment = name;
+		curr_assignment = assignment;
 	});
 
 	// go to assignment
 	$("#nav-assignment-btn").click(function(){
-		window.location = "/assignment/" + assignment;
+		window.location = "/assignment/" + curr_assignment.author + "/" + curr_assignment.name;
 	});
 });
