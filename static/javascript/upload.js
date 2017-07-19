@@ -10,7 +10,7 @@ $("#upload-btn").click(function(){
 	$("#files").click();
 });
 
-
+//---------------------- new file ----------------------//
 function new_file(){
 	var filename = $(".curr-uploader input").val();
 	$(".curr-uploader").append("<p>" + filename + "</p>");
@@ -34,15 +34,16 @@ $("#files").change(function(){
 	var html = "";
 	for(var i = 0; i < files.length; i++){
 		var file = files[i];
-		html += "<p>" + file.name + "</p>";
+		html += "<tr><td>" + file.name + "</td></tr>";
 	}
-	$(".files-container").html(html);
+	$(".files-container table tbody").html(html);
 
 });
 
 
 $("#submit-btn").click(function(){	
 	var formData = new FormData($("#files-form")[0]);
+
     $.ajax({
         url: "/upload",
         type: 'POST',
@@ -53,6 +54,15 @@ $("#submit-btn").click(function(){
         },
         cache: false,
         contentType: false,
-        processData: false
+        processData: false,
+
+        success: function(data){
+        	if(data.status == "Failed"){
+        		alert(data.message);
+        	}
+        	else{
+        		alert("")
+        	}
+        }
     });
 });

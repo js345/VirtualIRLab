@@ -13,27 +13,26 @@ def login_auth_required(f):
             token = session['token']
         except:
             print("Cannot find token")
-            return make_response(render_template("index.html"),200,headers)
+            return redirect("/index")
 
         if token is None:
             print("Token is null")
-            return make_response(render_template("index.html"),200,headers)
+            return redirect("/index")
 
         s = Serializer(current_app.config.get('SECRET_KEY'))
         try:
             user_id = s.loads(token)
         except SignatureExpired:
-            return make_response(render_template("index.html"),200,headers)    # valid token, but expired
+            return redirect("/index")    # valid token, but expired
         except BadSignature:
-            return make_response(render_template("index.html"),200,headers)    # invalid token
+            return redirect("/index")    # invalid token
 
         user = User.objects(id=user_id).first()
 
         if redis_store.get(user_id) == token:
             return f(*args, **kwargs)
         else:
-            return make_response(render_template("index.html"),200,headers) 
-
+            return redirect("/index")
     return decorated_function
 
 

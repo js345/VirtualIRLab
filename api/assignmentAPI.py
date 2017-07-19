@@ -20,6 +20,7 @@ parser.add_argument('deadline', type=str)
 parser.add_argument('status', type=bool)
 parser.add_argument('content', type=str)
 parser.add_argument('creator', type=str)
+parser.add_argument('doc_scores', type=dict)
 
 
 class AssignAPI(Resource):
@@ -33,19 +34,13 @@ class AssignAPI(Resource):
         params = args['params']
         dataset = args['dataset']
         deadline = args['deadline']
+        doc_scores = args['doc_scores']
         # class_ = args['class']
         instructor_id = session['user_id']
-
+ 
         instructor = User.objects(id=instructor_id).first()
         # class_ = Class.objects(id=class_)
         dataset = DataSet.objects(id=dataset).first()
-
-        # serialize params
-        serialized_params = ""
-        for key in params:
-            value = params[key]
-            serialized_params += key + ":" + value + ","
-        serialized_params = serialized_params[:-1]
 
         # add assignment to each student in class
 
@@ -59,9 +54,10 @@ class AssignAPI(Resource):
             assignment.instructor = instructor
             assignment.annotator = annotator
             assignment.ranker = ranker
-            assignment.params = serialized_params
+            assignment.params = params
             assignment.dataset = dataset
             assignment.deadline = deadline
+            assignment.doc_scores = doc_scores
             assignment.status = False
             assignment.view_status = False
             assignment.save()
@@ -84,7 +80,7 @@ class AssignmentAPI(Resource):
             .filter(annotator=user).first()
 
         assignment.instructor_name = assignment.instructor.name
-        assignment.ds_name = assignment.dataset.name
+        assignment.ds_name = assignment.dataset.ds_name
 
         return make_response(
             render_template(
@@ -94,15 +90,38 @@ class AssignmentAPI(Resource):
             200,headers)
 
 
+parser.add_argument('assignment_id', type=str)
 
 class AssignmentUpdateAPI(Resource):
-    def get(self):
+    def post(self):
         headers = {'Content-Type': 'application/json'}
         args = parser.parse_args()
+        assignment_id = args['assignment_id']
+        print assignment_id
+
+        assignment = Assignment.objects(id=assignment_id).first()
 
         name = args['name']
+        query = args['query']
+        ranker = args['ranker']
+        params = args['params']
+        dataset = args['dataset']
+        deadline = args['deadline']
+        doc_scores = args['doc_scores']
 
-        assignment = Assignment.objects(name=name).first()
+        assignments = Assignment.objects(instructor=assignment.instructor, name=assignment.name)
+
+        for assignment in assignments:
+            assignment.name = name
+            assignment.query = query
+            assignment.ranker = ranker
+            assignment.params = params
+            assignment.deadline = deadline
+
+            if len(doc_scores) != 0:
+                assignment.doc_scores = doc_scores
+ 
+            assignment.save()
 
         return jsonify(assignment)
 

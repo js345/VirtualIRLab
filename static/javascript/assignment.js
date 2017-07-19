@@ -2,60 +2,96 @@
 var assignment;
 
 $(document).ready(function(){
-	// get the documents
-	get_documents();
+	updateAssignmentView();
+
+	// send annotations
+	$("#submit-btn").click(function(){
+		var annotations = {};
+
+		// judge if the student finish annotation or not
+		var labels = $("tbody").find(".label");
+		for(var i = 0; i < labels.length; i++){
+			var label = labels[i];
+			var id = $(label).attr("id");
+			var input_name = "input[name=" + id + "-label-name]:checked";
+			if(!$(input_name).val()){
+				alert("Please finish assignment");
+				break;
+			}
+
+			annotations[id+".txt"] = $(input_name).val();
+		}
+
+
+		var data = {
+			"assignment" : assignment,
+			"annotations" : annotations
+		}
+
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: "/annotation",
+			data: JSON.stringify(data),
+			contentType: 'application/json; charset=utf-8'
+		})
+		.success(function(data){
+			window.location = "/alert/annotator/Submit Successful";
+		});
+	});
 });
 
 
-function get_documents(){
-	// parse params
-	var params = {}
-	var t_params = assignment.params;
-	t_params = t_params.split(",");
-	for(var i = 0; i < t_params.length; i++){
-		param = t_params[i];
-		param = param.split(":");
-		params[param[0]] = param[1]
+
+function updateAssignmentView(){
+	var html = "";
+
+	for(key in assignment.doc_scores){
+		var name_with_txt = key + ".txt";
+		html += "<tr>" + 
+	            "<td>" + 
+	              "<a onclick='get_document_detail(this)' class='document-title' data-toggle='modal' data-target='#document-modal'>" + name_with_txt + "</a>" +
+	            "</td>" +
+	            "<td>" +
+	              "<div class='label' id='" + key + "'>" +
+	                "<div><input type='radio' name='" + key + "-label-name' value='relevant'> &nbsp;Relevant</div>" +
+	                "<div style='margin-left:20px;'><input type='radio' name='" + key + "-label-name' value='irrelevant'> &nbsp;Not Relevant</div>" +
+	              "</div>" +
+	            "</td>" +
+	          "</tr>";
 	}
 
-	// form data
+	$("tbody").html(html);
+}
+
+
+
+function get_document_detail(target){
+	var doc_name = $(target).html();
+
 	var data = {
-		"query" : assignment.query,
-		"ranker" : assignment.ranker,
-		"num_results" : 10,
-		"params" : params
-	};
+		"assignment" : assignment,
+		"document_name" : doc_name
+	}
 
 	// send data
 	$.ajax({
 		type: "POST",
 		dataType: "json",
-		url: "/search/" + assignment.instructor_name + "/" + assignment.ds_name,
+		url: "/document",
 		data: JSON.stringify(data),
 		contentType: 'application/json; charset=utf-8'
 	})
 	.success(function(data){
-		console.log(data.results);
-		updateAssignmentView(data.results);
+		console.log(data);
+		$(".modal-title").html(doc_name);
+		$(".modal-body").html(data);
 	});
 }
 
-function updateAssignmentView(documents){
-	var html = "";
 
-	documents.forEach(function(document){
-		html += "<tr>" + 
-		            "<td>" + 
-		              "<a data-toggle='modal' data-target='#document-content'>" + document.name + "</a>" +
-		            "</td>" +
-		            "<td>" +
-		              "<div class='label'>" +
-		                "<div><input type='radio' name='label-name'> &nbsp;Relevant</div>" +
-		                "<div style='margin-left:20px;'><input type='radio' name='label-name'> &nbsp;Not Relevant</div>" +
-		              "</div>" +
-		            "</td>" +
-		          "</tr>";
-	});
 
-	$("tbody").html(html);
-}
+
+
+
+

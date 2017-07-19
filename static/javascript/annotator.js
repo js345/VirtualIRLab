@@ -15,7 +15,6 @@ $(document).ready(function(){
 		}
 	});
 
-
 	// show assignment detail
 	$("#assignments-children li").click(function(){
 		var name = $(this).html();
@@ -33,10 +32,32 @@ $(document).ready(function(){
 		$("#content-assignment").show();
 
 		curr_assignment = assignment;
+
+		// remind user if this assignment have been finished already
+		if(curr_assignment.status == true){
+			$("#nav-assignment-btn").html("Start Over");
+		}
+		else{
+			$("#nav-assignment-btn").html("Start");
+		}
 	});
 
 	// go to assignment
 	$("#nav-assignment-btn").click(function(){
+		if($(this).html() == "Start Over"){
+			$("#alert-modal").modal('show');
+			return;
+		}
+
 		window.location = "/assignment/" + curr_assignment.author + "/" + curr_assignment.name;
+	});
+
+	$("#nav-assignment-modal-btn").click(function(){
+		window.location = "/assignment/" + curr_assignment.author + "/" + curr_assignment.name;
+	});
+
+	// play btn clicked
+	$("#play-btn").click(function(){
+		window.location = "/search/" + curr_assignment.author + "/" + curr_assignment.ds_name;
 	});
 });

@@ -1,0 +1,27 @@
+{% extends "basic_layout.html" %}
+{% block body %}
+	<style type="text/css">
+		div{
+			width: 60%;
+			margin-left: 20%;
+			margin-top: 100px;
+			text-align: center;
+		}
+
+		button{
+			margin-top: 50px;
+		}
+
+	</style>
+
+	<div class="well">
+		<h3>{{data.message}}</h3>
+		<button class="btn btn-primary">Go Back</button>
+	</div>
+
+	<script type="text/javascript">
+		$("button").click(function(){
+			window.location = "{{data.url}}";
+		});
+	</script>
+{% endblock %}

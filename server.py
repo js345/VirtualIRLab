@@ -8,10 +8,15 @@ from api.annotationAPI import AnnotationAPI
 from api.uploadAPI import UploadAPI
 from api.userAPI import UserAPI, LoginAPI
 from api.assignmentAPI import AssignAPI, AssignmentAPI, AssignmentUpdateAPI
+from api.documentAPI import DocumentAPI
+from api.documentAPI import DocumentsAPI
+from api.datasetAPI import DatasetAPI
+from api.datasetAPI import DatasetUpdateAPI
 from api.instructorAPI import InstructorAPI
 from api.annotatorAPI import AnnotatorAPI
 from api.classAPI import ClassAPI
 from api.logoutAPI import LogoutAPI
+from api.alertAPI import AlertAPI
 
 from util.exception import InvalidUsage
 
@@ -38,9 +43,17 @@ api.add_resource(AssignAPI, '/assign')
 api.add_resource(AssignmentAPI, '/assignment/<string:instructor_name>/<string:assignment_name>')
 api.add_resource(AssignmentUpdateAPI, '/assignment_update')
 
+api.add_resource(DocumentsAPI, '/documents')
+api.add_resource(DocumentAPI, '/document')
+
 api.add_resource(InstructorAPI, '/instructor')
 api.add_resource(AnnotatorAPI, '/annotator')
 api.add_resource(ClassAPI, '/class')
+
+api.add_resource(DatasetAPI, '/dataset/<string:author>/<string:ds_name>')
+api.add_resource(DatasetUpdateAPI, '/dataset_update')
+
+api.add_resource(AlertAPI, '/alert/<string:url>/<string:message>')
 
 
 @app.errorhandler(InvalidUsage)

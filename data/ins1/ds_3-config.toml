@@ -1,7 +1,7 @@
+index = "ds_3-idx"
 prefix = "."
-dataset = "beer_ds"
 corpus = "file.toml"
-index = "beer_ds-idx"
+dataset = "ds_3"
 
 [[analyzers]]
 ngram = 1

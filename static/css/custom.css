@@ -5,7 +5,9 @@ ul {
   list-style: none
 }
 
-
+a{
+  cursor: pointer;
+}
 
 .navbar-form {
   width: 100%;
@@ -47,4 +49,12 @@ body > .container {
 
 code {
   font-size: 80%;
+}
+
+
+/*widget*/
+.line{
+  width: 100%;
+  height: 1px;
+  background-color: #dddddd;
 }

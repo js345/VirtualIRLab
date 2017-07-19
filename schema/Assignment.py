@@ -9,5 +9,6 @@ class Assignment(db.DynamicDocument):
     status = db.BooleanField(required=True)
     view_status = db.BooleanField(required=True)
     ranker = db.StringField(required=True)
-    params = db.StringField(required=True)
+    params = db.DictField(required=True)
+    doc_scores = db.DictField(required=True)
     deadline = db.StringField(required=True)

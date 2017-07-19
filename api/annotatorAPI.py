@@ -1,6 +1,6 @@
 from flask import make_response, render_template, current_app, jsonify, session
 from flask_restful import Resource, reqparse
-from util.userAuth import annotator_auth_required
+from util.userAuth import login_auth_required, annotator_auth_required
 
 from schema.DataSet import DataSet
 
@@ -13,7 +13,7 @@ parser = reqparse.RequestParser()
 
 
 class AnnotatorAPI(Resource):
-
+    @login_auth_required
     @annotator_auth_required
     def get(self):
         headers = {'Content-Type': 'text/html'}
@@ -27,6 +27,7 @@ class AnnotatorAPI(Resource):
 
         for assignment in assignments:
             assignment['author'] = assignment.instructor.name
+            assignment['ds_name'] = assignment.dataset.ds_name
 
         return make_response(
             render_template(

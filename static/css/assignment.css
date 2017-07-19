@@ -48,6 +48,10 @@ td a{
 
 
 /*modals*/
+.modal{
+	margin-top: 150px;
+}
+
 .modal-content{
 	border-radius: 5px;
 }

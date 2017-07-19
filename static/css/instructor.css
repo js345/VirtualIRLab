@@ -2,6 +2,8 @@ p{
 	cursor: pointer;
 }
 
+
+/*dataset*/
 .ds-container{
 	margin-left: 20px;
 	margin-top: 10px;
@@ -10,8 +12,9 @@ p{
 
 
 .ds-select-container{
+	font-size: 18px;
 	display: block;
-	/*height: 30px;*/
+	height: 30px;
 }
 
 .ds-select-container input{
@@ -23,28 +26,50 @@ p{
 .ds-select-container .dataset-name{
 	float: left;
 	margin-left: 10px;
-	line-height: 20px;
+	line-height: 16px;
+}
+
+.extend-tag{
+	margin-left: 5px;
+	font-size: 10px;
 }
 
 #btn-container{
-	margin-top: 20px;
+	margin-top: 100px;
 }
 
 
-/*assignments*/
-#table-assignments{
+/*assignments tab*/
+.assignment-container{
+	margin-top: 30px;
 	width: 100%;
 }
 
-#table-assignments tr{
-	border-bottom: solid 1px #dddddd;
+#tab-assignments table thead tr{
+	font-weight: bold;
+	font-size: 18px;
 }
 
-#table-assignments td{
-	padding-top: 10px;
-	padding-bottom: 5px;
+
+.assignment-title a{
+	font-size: 12px;
+	font-weight: normal;
 }
 
+.assignment-params{
+	float: left;
+}
+
+.assignment-param{
+	margin-left: 10px;
+}
+
+
+.assignment-container table{
+	text-align:center; 
+	margin-top:20px;
+	display:none;
+}
 
 
 /*modal*/
@@ -59,3 +84,29 @@ p{
 .modal-body .form-control{
 	height: 30px;
 }
+
+.modal-body select{
+	height: 30px;
+}
+
+/*#ds-detail-modal .modal-dialog{
+	width: 1000px;
+}
+
+#ds-detail-modal .modal-content{
+	width: 1000px;
+}
+*/
+.document-annotation .document-title{
+	display: inline-block;
+}
+
+.document-judgement{
+	float:right;
+}
+
+.document-annotation .document-judgement p{
+	float: right;
+}
+
+

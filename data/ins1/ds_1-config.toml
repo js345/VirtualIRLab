@@ -1,7 +1,7 @@
-index = "test1-idx"
+index = "ds_1-idx"
 prefix = "."
 corpus = "file.toml"
-dataset = "test1"
+dataset = "ds_1"
 
 [[analyzers]]
 ngram = 1
