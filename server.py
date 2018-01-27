@@ -14,6 +14,7 @@ from api.datasetAPI import DatasetAPI
 from api.datasetAPI import DatasetUpdateAPI
 from api.instructorAPI import InstructorAPI
 from api.annotatorAPI import AnnotatorAPI
+from api.queryAPI import QueryAPI
 from api.classAPI import ClassAPI
 from api.logoutAPI import LogoutAPI
 from api.alertAPI import AlertAPI
@@ -42,6 +43,8 @@ api.add_resource(LogoutAPI, '/logout')
 api.add_resource(AssignAPI, '/assign')
 api.add_resource(AssignmentAPI, '/assignment/<string:instructor_name>/<string:assignment_name>')
 api.add_resource(AssignmentUpdateAPI, '/assignment_update')
+
+api.add_resource(QueryAPI, '/query')
 
 api.add_resource(DocumentsAPI, '/documents')
 api.add_resource(DocumentAPI, '/document')

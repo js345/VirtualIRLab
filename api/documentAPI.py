@@ -6,13 +6,12 @@ from schema.DataSet import DataSet
 from schema.Assignment import Assignment
 from schema.Document import Document
 from schema.Annotation import Annotation
+from schema.Query import Query
 
 parser = reqparse.RequestParser()
 
 parser.add_argument('assignment_id', type=str)
-
-# class DocumentsAPI(Resource):
-#     def get(self):
+parser.add_argument('query_content', type=str)
         
 
 class DocumentsAPI(Resource):
@@ -21,13 +20,13 @@ class DocumentsAPI(Resource):
         headers = {'Content-Type': 'application/json'}
         args = parser.parse_args()
         assignment_id = args['assignment_id']
+        query_content = args['query_content']
 
         documents = []
 
         assignment = Assignment.objects(id=assignment_id).first()
-        assignments = Assignment.objects(instructor=assignment.instructor,name=assignment.name)
-        
-        doc_scores = assignment.doc_scores
+        query = Query.objects(assignment=assignment,content=query_content).first()        
+        doc_scores = query.doc_scores
 
         for doc_name in doc_scores:
             score = doc_scores[doc_name]
@@ -36,8 +35,8 @@ class DocumentsAPI(Resource):
             # get the document and count rel_num
             document = Document.objects(dataset=assignment.dataset,name=full_doc_name).first()
 
-            rel_num = Annotation.objects(document=document,assignment__in=assignments,judgement='relevant').count()
-            irrel_num = Annotation.objects(document=document,assignment__in=assignments,judgement='irrelevant').count()
+            rel_num = Annotation.objects(document=document,query=query,judgement='relevant').count()
+            irrel_num = Annotation.objects(document=document,query=query,judgement='irrelevant').count()
 
             documents.append({
                 'name' : full_doc_name,
@@ -45,6 +44,9 @@ class DocumentsAPI(Resource):
                 'rel_num' : rel_num,
                 'irrel_num' : irrel_num
             })
+
+        documents = sorted(documents, key=lambda k: k['score'], reverse=True) 
+
 
         return make_response(jsonify(documents), 200, headers)
 
@@ -66,12 +68,11 @@ class DocumentAPI(Resource):
         author_name = dataset.author.name
 
         doc_path = current_app.root_path + "/data/" + author_name + "/" + ds_name + "/" + document_name
-
         file = open(doc_path, "r")
         document = file.readlines()
         file.close()
 
-        print document
+        return document[0]
 
 
 

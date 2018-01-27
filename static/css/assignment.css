@@ -5,11 +5,18 @@
 	margin-top: 20px;
 }
 
+#new-query-container input{
+	margin-top: 20px;
+}
+
+#new-query-container button{
+	margin-top: 10px
+}
 
 
 
 /*result panel*/
-#result-panel{
+.result-panel{
 	width: 800px;
 	margin: 0 auto;
 	margin-top: 20px;
@@ -42,8 +49,8 @@ td a{
 
 #submit-btn{
 	width: 200px;
-	margin-left: 300px;
-	margin-bottom: 20px;
+	margin: 20px auto;
+	display: block;
 }
 
 

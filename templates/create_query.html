@@ -5,9 +5,7 @@
 
   <script type="text/javascript">
     assignment = {{assignment|tojson}};
-    user = {{user|tojson}};
     console.log(assignment);
-    console.log(user);
   </script>
 
   <!-- information panel -->
@@ -17,10 +15,6 @@
       <h3 id="assignment-name">{{assignment.name}}</h3>
       <h5 id="assignment-ranker">Ranker: {{assignment.ranker}}</h5>
       <h4 id="assignment-params"></h4>
-
-      <div id="new-query-container">
-        <input id="new-query-input" class="form-control" tpye="text" placeholder="New Query..."><button id="new-query-apply-btn" class="btn btn-primary">Apply New Query</button>
-      </div>
     </div>
   </div><!-- end of information panel -->
 
@@ -49,7 +43,8 @@
   {% endfor %}
 
   <button id="submit-btn" class="btn btn-primary">Submit</button>
-
+7
+information desk
 
   <!-- modals -->
   <div id="document-modal" class="modal fade" id="document-content" role="dialog">

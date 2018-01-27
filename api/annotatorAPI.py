@@ -23,7 +23,7 @@ class AnnotatorAPI(Resource):
         user = User.objects(id=user_id).first()
 
         # get all assignments
-        assignments = Assignment.objects(annotator=user)
+        assignments = Assignment.objects(annotators__in=[user])
 
         for assignment in assignments:
             assignment['author'] = assignment.instructor.name

@@ -77,6 +77,10 @@ p{
 	margin-top: 5px;
 }
 
+.modal-body .row{
+	margin-top: 5px;
+}
+
 .modal-body label{
 	line-height: 30px;
 }
@@ -89,14 +93,7 @@ p{
 	height: 30px;
 }
 
-/*#ds-detail-modal .modal-dialog{
-	width: 1000px;
-}
 
-#ds-detail-modal .modal-content{
-	width: 1000px;
-}
-*/
 .document-annotation .document-title{
 	display: inline-block;
 }

@@ -10,6 +10,7 @@ var documents = {};
 var curr_dataset_id;
 
 $(document).ready(function(){
+
 	$('[data-toggle="tooltip"]').tooltip(); 
 
 	$("#assignment-deadline").datepicker();
@@ -59,7 +60,14 @@ $(document).ready(function(){
 	$("#create-assignment-btn").click(function(){
 		// form data
 		var name = $("#assignment-name").val();
-		var query = $("#assignment-query").val();
+		var queries = [];
+		// list of queries
+		$(".query-container").find("input").each(function(){
+			if($(this).val() != ""){
+				queries.push($(this).val());
+			}
+		});
+
 		var class_ = $("#assignment-class").val();
 		var ds_id = $('input[name="data_set"]:checked').val();
 		var ranker = $("#assignment-ranker").val();
@@ -75,59 +83,97 @@ $(document).ready(function(){
 		var ds_name = datasets[ds_id].ds_name;
 		var ds_author = $('input[name="data_set"]:checked').parent().attr("id");
 
-		console.log(ds_author);
-
-		// send data to search
-		var search_data = {
-			"query" : query,
+		// create assignment
+		var assign_data = {
+			"name" : name,
+			"class" : class_,
+			"dataset" : ds_id,
 			"ranker" : ranker,
-			"num_results" : num_results,
-			"params" : params
+			"params" : params,
+			"deadline" : deadline,
 		};
-
+		// send data to create new assignment
 		$.ajax({
-			type : "POST",
-			url : "/search/" + ds_author + "/" + ds_name,
-			data: JSON.stringify(search_data),
+			type: "POST",
+			dataType: "json",
+			url: "/assign",
+			data: JSON.stringify(assign_data),
 			contentType: 'application/json; charset=utf-8'
 		})
 		.success(function(data){
-			doc_scores = {}
-			for(var i = 0; i < data.results.length; i++){
-				var doc_name = data.results[i].name;
-				doc_name = doc_name.substring(0, doc_name.length - 4);
-				var doc_score = data.results[i].score;
-				doc_scores[doc_name] = doc_score
+			var assginment_id = data;
+			var count = 0;
+			// send each query to /search
+			for(var i = 0; i < queries.length; i++){
+				var query = queries[i];
+				var search_data = {
+					"query" : query,
+					"ranker" : ranker,
+					"num_results" : num_results,
+					"params" : params
+				};
+				(function(query){
+					$.ajax({
+						type : "POST",
+						url : "/search/" + ds_author + "/" + ds_name,
+						data: JSON.stringify(search_data),
+						contentType: 'application/json; charset=utf-8'
+					})
+					.success(function(data){
+						doc_scores = {}
+						for(var i = 0; i < data.results.length; i++){
+							var doc_name = data.results[i].name;
+							doc_name = doc_name.substring(0, doc_name.length - 4);
+							var doc_score = data.results[i].score;
+							doc_scores[doc_name] = doc_score;
+						}
+
+						var query_data = {
+							"query" : query,
+							"doc_scores" : doc_scores,
+							"assignment_id" : assginment_id,
+							"user_id" : user['_id']['$oid']
+						};
+
+
+						// send data to create new assignment
+						$.ajax({
+							type: "POST",
+							dataType: "json",
+							url: "/query",
+							data: JSON.stringify(query_data),
+							contentType: 'application/json; charset=utf-8'
+						})
+						.success(function(){
+							count++;
+							if(count == queries.length){
+								$("#assign-notification-modal").modal("show");
+							}
+						})
+					})
+				})(query);
+
 			}
-
-			var assign_data = {
-				"name" : name,
-				"query" : query,
-				"class" : class_,
-				"dataset" : ds_id,
-				"ranker" : ranker,
-				"params" : params,
-				"deadline" : deadline,
-				"doc_scores" : doc_scores
-			};
-
-
-			// send data to create new assignment
-			$.ajax({
-				type: "POST",
-				dataType: "json",
-				url: "/assign",
-				data: JSON.stringify(assign_data),
-				contentType: 'application/json; charset=utf-8'
-			})
-			.success(function(data){
-				$("#assign-notification-modal").modal("show");
-			});
-		})
+		});
 	});
 
 	$("#create-assignment-complete-btn").click(function(){
 		location.reload();
+	});
+
+	// add new query btn
+	$("#add-query-btn").click(function(){
+		var query_container = $("#query-container");
+		if($(".query-container div:nth-last-child(2)").find("input").val() != ""){
+			var new_query_html;
+			if($(".query-container").children().length == 2){
+				var new_query_html = "<div><div class='col-sm-8 col-sm-offset-3'><input id='assignment-query' class='form-control' type='text'></div></div>";
+			}
+			else{
+				var new_query_html = "<div><div class='col-sm-8 col-sm-offset-3' style='margin-top:5px;'><input id='assignment-query' class='form-control' type='text'></div></div>";
+			}
+			$(this).parent().before(new_query_html);
+		}
 	});
 
 
@@ -334,20 +380,36 @@ $(document).ready(function(){
 	});
 
 	// show documents for assignments
-	$(".table-show-hide-btn").click(function(){
+	var annotated_documents = {}
+	var prev_selected_btn = {};
+	$(".show-hide-documents-btn").click(function(){
 		var button = $(this);
 		var id = button.attr("id");
-		var assignment_id = $(this).parent().parent().attr('id');
 
-		table_id = "#table-" + id.substring(4);
+		var assignment_id = id.split("-")[0];
+		var query_content = id.split("-")[1];
+
+		table_id = "#table-" + assignment_id;
 
 
-		if(button.html() == "Show Documents" && $(table_id).find("tbody").html() == ""){
+		if(button.hasClass('btn-primary')){
+			button.removeClass('btn-primary').addClass('btn-info');
+			$(table_id).hide();
+		}
+		else{
+			if(prev_selected_btn[assignment_id] != null){
+				prev_selected_btn[assignment_id].removeClass('btn-primary').addClass('btn-info');
+			}
+
+			button.addClass('btn-primary').removeClass('btn-info');
+			prev_selected_btn[assignment_id] = button;
+
+			// get documents
 			$.ajax({
 				type: "GET",
 				dataType: "json",
 				url: "/documents",
-				data: {'assignment_id': assignment_id}
+				data: {'assignment_id': assignment_id, 'query_content':query_content}
 			})
 			.success(function(data){
 				var html = "";
@@ -365,19 +427,8 @@ $(document).ready(function(){
 
 				$(table_id).find("tbody").html(html);
 
-				button.html("Hide Documents");
 				$(table_id).show();
 			});
-		}
-		else{
-			if(button.html() == "Show Documents"){
-				button.html("Hide Documents");
-				$(table_id).show();
-			}
-			else{
-				button.html("Show Documents");
-				$(table_id).hide();
-			}
 		}
 	});
 
@@ -423,7 +474,6 @@ $(document).ready(function(){
 		var ds_privacy = $("#dataset-update-privacy option:selected").val();
 		var collaborators = [];
 		$(".collaborator").each(function(i){
-			console.log($(this).val());
 			if(datasets[curr_dataset_id]['collaborators_names'].indexOf($(this).val()) != -1){
 				alert("The intructor already exists");
 				return;

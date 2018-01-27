@@ -29,7 +29,6 @@ class AssignAPI(Resource):
         headers = {'Content-Type': 'application/json'}
         args = parser.parse_args()
         name = args['name']
-        query = args['query']
         ranker = args['ranker']
         params = args['params']
         dataset = args['dataset']
@@ -47,23 +46,25 @@ class AssignAPI(Resource):
         # send assignments to all annotators by default(test)
         annotators = User.objects(group='annotator')
 
+        statuses = dict()
         for annotator in annotators:
-            assignment = Assignment()
-            assignment.name = name
-            assignment.query = query
-            assignment.instructor = instructor
-            assignment.annotator = annotator
-            assignment.ranker = ranker
-            assignment.params = params
-            assignment.dataset = dataset
-            assignment.deadline = deadline
-            assignment.doc_scores = doc_scores
-            assignment.status = False
-            assignment.view_status = False
-            assignment.save()
+            statuses[str(annotator.id)] = False
+
+        assignment = Assignment()
+        assignment.name = name
+        assignment.instructor = instructor
+        assignment.ranker = ranker
+        assignment.params = params
+        assignment.dataset = dataset
+        assignment.annotators = annotators
+        assignment.statuses = statuses
+        assignment.deadline = deadline
+        assignment.save()
+
+        print assignment.id
 
             
-        return make_response(jsonify("succeed"), 200, headers)
+        return str(assignment.id)
 
 
 
@@ -76,16 +77,19 @@ class AssignmentAPI(Resource):
         user = User.objects(id=user_id).first()
 
         assignment = Assignment.objects(name=assignment_name)  \
-            .filter(instructor=instructor)  \
-            .filter(annotator=user).first()
+            .filter(instructor=instructor).first()
 
         assignment.instructor_name = assignment.instructor.name
         assignment.ds_name = assignment.dataset.ds_name
+        assignment.ds_author = assignment.dataset.author.name
 
+        queries = Query.objects(assignment=assignment)
         return make_response(
             render_template(
                 "assignment.html",
-                assignment = assignment
+                user = user,
+                assignment = assignment,
+                queries = queries
             ),
             200,headers)
 

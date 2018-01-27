@@ -9,6 +9,7 @@ from schema.Class import Class
 from schema.Assignment import Assignment
 from schema.Annotation import Annotation
 from schema.Document import Document
+from schema.Query import Query
 
 from schema import redis_store
 from util.userAuth import login_auth_required, instructor_auth_required
@@ -68,6 +69,9 @@ class InstructorAPI(Resource):
 			assignment['ds_author'] = assignment.dataset.author.name
 			assignment['ds_name'] = assignment.dataset.ds_name
 			assignments.append(assignment)
+
+			queries = Query.objects(assignment=assignment)
+			assignment['queries'] = queries
 
 		return make_response(render_template(
 			"instructor.html", 

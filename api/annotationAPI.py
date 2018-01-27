@@ -8,9 +8,10 @@ from schema.DataSet import DataSet
 from schema.Query import Query
 from schema.Document import Document
 
+
 import json
 parser = reqparse.RequestParser()
-parser.add_argument('assignment', type=dict)
+parser.add_argument('assignment_id', type=str)
 parser.add_argument('annotations', type=dict)
 
 
@@ -19,37 +20,39 @@ class AnnotationAPI(Resource):
     def post(self): 
         headers = {'Content-Type': 'application/json'}
         args = parser.parse_args()
-        assignment = args['assignment']
-        assignment_id = assignment["_id"]["$oid"]
+        assignment_id = args['assignment_id']
         assignment = Assignment.objects(id=assignment_id).first()
+
         annotations = args['annotations']
         user_id = session['user_id']
 
         annotator = User.objects(id=user_id).first()
 
+        for query_content in annotations:
+            query = Query.objects(assignment=assignment, content=query_content).first()
 
-        for file_name in annotations:
-            label = annotations[file_name]
-
-            dataset = assignment.dataset
-
-            document = Document.objects(dataset=dataset) \
-                        .filter(name=file_name).first()
+            apq = annotations[query_content]
 
 
-            if len(Annotation.objects(annotator=annotator,document=document,assignment=assignment)) != 0:
-                a = Annotation.objects(annotator=annotator,document=document,assignment=assignment).first()
-                a.modify(judgement=label)
-            else:
+            for file_name in apq:
+                label = apq[file_name]
+
+                dataset = assignment.dataset
+
+                print dataset.id
+                print file_name
+
+                document = Document.objects(dataset=dataset) \
+                            .filter(name=file_name).first()
+
                 a = Annotation()
                 a.annotator = annotator
                 a.document = document
                 a.judgement = label
-                a.assignment = assignment
+                a.query = query
                 a.save()
 
         #mark the assignment complete
-        assignment.status = True
-        assignment.save()
+
 
         return make_response(jsonify("succeed"), 200, headers)
