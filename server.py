@@ -2,13 +2,22 @@ from flask import Flask, jsonify
 from flask_restful import Api
 from flask_cors import CORS
 from schema import db, redis_store
+from api.indexAPI import IndexAPI
 from api.searchAPI import SearchAPI
 from api.annotationAPI import AnnotationAPI
 from api.uploadAPI import UploadAPI
 from api.userAPI import UserAPI, LoginAPI
-from api.assignmentAPI import AssignmentAPI, AddQueryAPI
+from api.assignmentAPI import AssignAPI, AssignmentAPI, AssignmentUpdateAPI
+from api.documentAPI import DocumentAPI
+from api.documentAPI import DocumentsAPI
+from api.datasetAPI import DatasetAPI
+from api.datasetAPI import DatasetUpdateAPI
 from api.instructorAPI import InstructorAPI
+from api.annotatorAPI import AnnotatorAPI
+from api.queryAPI import QueryAPI
 from api.classAPI import ClassAPI
+from api.logoutAPI import LogoutAPI
+from api.alertAPI import AlertAPI
 
 from util.exception import InvalidUsage
 
@@ -22,15 +31,33 @@ CORS(app)
 db.init_app(app)
 redis_store.init_app(app)
 
+api.add_resource(IndexAPI, '/index')
 api.add_resource(SearchAPI, '/search/<string:author>/<string:ds_name>')
 api.add_resource(AnnotationAPI, '/annotation')
 api.add_resource(UploadAPI, '/upload')
+
 api.add_resource(UserAPI, '/register')
 api.add_resource(LoginAPI, '/login')
-api.add_resource(AssignmentAPI, '/assign')
-api.add_resource(AddQueryAPI, '/newquery')
+api.add_resource(LogoutAPI, '/logout')
+
+api.add_resource(AssignAPI, '/assign')
+api.add_resource(AssignmentAPI, '/assignment/<string:instructor_name>/<string:assignment_name>')
+api.add_resource(AssignmentUpdateAPI, '/assignment_update')
+
+api.add_resource(QueryAPI, '/query')
+
+api.add_resource(DocumentsAPI, '/documents')
+api.add_resource(DocumentAPI, '/document')
+
 api.add_resource(InstructorAPI, '/instructor')
+api.add_resource(AnnotatorAPI, '/annotator')
 api.add_resource(ClassAPI, '/class')
+
+api.add_resource(DatasetAPI, '/dataset/<string:author>/<string:ds_name>')
+api.add_resource(DatasetUpdateAPI, '/dataset_update')
+
+api.add_resource(AlertAPI, '/alert/<string:url>/<string:message>')
+
 
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
@@ -41,10 +68,6 @@ def handle_invalid_usage(error):
 @app.route("/student")
 def student_page():
 	return render_template("student.html")
-
-@app.route("/index")
-def main():
-	return render_template("index.html")
 
 
 if __name__ == '__main__':

@@ -1,34 +1,70 @@
-from flask import abort, current_app, request, session
+from flask import abort, current_app, request, session, redirect, render_template, make_response
 from schema import redis_store
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
 from functools import wraps
+from schema.User import User
 
-def auth_required(f):
+def login_auth_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        headers = {'Content-Type': 'text/html'}
         try:
             token = session['token']
         except:
             print("Cannot find token")
-            abort(401)
+            return redirect("/index")
 
         if token is None:
             print("Token is null")
-            abort(401)
+            return redirect("/index")
 
         s = Serializer(current_app.config.get('SECRET_KEY'))
         try:
             user_id = s.loads(token)
         except SignatureExpired:
-            abort(401)    # valid token, but expired
+            return redirect("/index")    # valid token, but expired
         except BadSignature:
-            abort(401)    # invalid token
+            return redirect("/index")    # invalid token
+
+        user = User.objects(id=user_id).first()
 
         if redis_store.get(user_id) == token:
-            # kwargs['user_id'] = user_id
             return f(*args, **kwargs)
         else:
-            abort(401)
+            return redirect("/index")
+    return decorated_function
+
+
+def instructor_auth_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        headers = {'Content-Type': 'text/html'}
+        s = Serializer(current_app.config.get('SECRET_KEY'))
+        token = session['token']
+        user_id = s.loads(token)
+        user = User.objects(id=user_id).first()
+
+        if user.group != "instructor":
+            return make_response(render_template("index.html"),200,headers)
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
+def annotator_auth_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        headers = {'Content-Type': 'text/html'}
+        s = Serializer(current_app.config.get('SECRET_KEY'))
+        token = session['token']
+        user_id = s.loads(token)
+        user = User.objects(id=user_id).first()
+
+        if user.group != "annotator":
+            return make_response(render_template("index.html"),200,headers)
+
+        return f(*args, **kwargs)
 
     return decorated_function

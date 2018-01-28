@@ -1,0 +1,69 @@
+{% extends "content_layout.html" %}
+{% block content %}
+  <link href="{{ url_for('static', filename='css/assignment.css') }}" rel="stylesheet"/>
+  <script src="{{ url_for('static', filename='javascript/assignment.js') }}"></script>
+
+  <script type="text/javascript">
+    assignment = {{assignment|tojson}};
+    console.log(assignment);
+  </script>
+
+  <!-- information panel -->
+  <div id="info-panel" class="panel panel-default">
+    <div class="panel-heading"><h4>Assignment Info</h4></div>
+    <div class="panel-body">
+      <h3 id="assignment-name">{{assignment.name}}</h3>
+      <h5 id="assignment-ranker">Ranker: {{assignment.ranker}}</h5>
+      <h4 id="assignment-params"></h4>
+    </div>
+  </div><!-- end of information panel -->
+
+  <!-- result panel -->
+  {% for query in queries %}
+  <div class="panel panel-default result-panel">
+    <div class="panel-heading"><h4>{{query.content}}</h4></div>
+    <div class="panel-body" style="padding:0px;">
+      <table class="table table-striped">
+        <tbody>
+          {% for key,value in query.doc_scores.items() %}
+            <tr>
+              <td><a onclick='get_document_detail(this)' class='document-title' data-toggle='modal' data-target='#document-modal'>{{key}}.txt</a></td>
+              <td>
+                <div class='label' id="{{query.content}}-{{key}}">
+                  <div><input type='radio' name='{{query.content}}-{{key}}-label-name' value='relevant'> &nbsp;Relevant</div>
+                  <div style='margin-left:20px;'><input type='radio'  name='{{query.content}}-{{key}}-label-name' value='irrelevant'> &nbsp;Not Relevant</div>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>  
+      </table>
+    </div>
+  </div>
+  {% endfor %}
+
+  <button id="submit-btn" class="btn btn-primary">Submit</button>
+7
+information desk
+
+  <!-- modals -->
+  <div id="document-modal" class="modal fade" id="document-content" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+{% endblock %}

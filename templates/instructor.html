@@ -8,59 +8,145 @@
 	<script type="text/javascript">
 		user = {{data.user|tojson}};
 		user = JSON.parse(user);
+		user = JSON.parse(user);
 
 		classes = [];
 		{% for class_ in data.classes %}
 			classes.push("{{class_}}");
 		{% endfor %}
-		
+
+		{% for dataset in data.my_datasets %}
+			datasets['{{dataset.id}}'] = {{dataset|tojson}};
+			datasets['{{dataset.id}}']['collaborators_names'] = [];
+			{% for collaborator in dataset.collaborators %}
+				datasets['{{dataset.id}}']['collaborators_names'].push("{{collaborator.name}}");
+			{% endfor %}
+		{% endfor %}
+
+		{% for dataset in data.public_datasets %}
+			datasets['{{dataset.id}}'] = {{dataset|tojson}};
+		{% endfor %}
+
+		{% for dataset in data.authorized_datasets %}
+			datasets['{{dataset.id}}'] = {{dataset|tojson}};
+		{% endfor %}
+
+		{% for assignment in data.assignments %}
+			assignments["{{assignment.id_}}"] ={{assignment|tojson}};
+
+		{% endfor %}
+
 
 	</script>
+
 
 	<button id="nav-upload-btn" class="btn-lg btn-primary">Upload Dataset</button>
 	<button class="btn-lg btn-primary" data-toggle="modal" data-target="#create-class-modal">Create Class</button>
 
-	<br>
-	<br>
-	<h1>Assignments</h1>
-	<br>
-
-	<ul class="nav nav-tabs">
-		<li class="active"><a data-toggle="tab" href="#assign">Assign</a></li>
-		<li><a data-toggle="tab" href="#waiting">Waiting</a></li>
-		<li><a data-toggle="tab" href="#history">History</a></li>
+	<ul class="nav nav-tabs" style="margin-top:50px;">
+		<li class="active"><a data-toggle="tab" href="#tab-datasets">Datasets</a></li>
+		<li><a data-toggle="tab" href="#tab-assignments">Assignments</a></li>
 	</ul>
 
-	<div class="tab-content">
-		<div id="assign" class="tab-pane fade in active">
-		  <h3 style="margin-bottom: 20px;">Assign</h3>
-		  {% for dataset in data.datasets %}
-		  		<div class="ds-container">
-		  			<div class="ds-select-container">
-						<input class="ds-checkbox" type="radio" name="data_set" value="{{dataset.id}}">
-						<p class="dataset-name">{{dataset.name}}</p><span data-toggle="collapse" data-target="#{{dataset}}" style="height: 20px;" class="glyphicon glyphicon-triangle-right"></span>
-					</div>
-					<div id="{{dataset}}" class="collapse" style=" margin-left: 22px;">Description:</div>
-				</div>
-		  {% endfor %}
 
-		  <div id="btn-container">
-			  <button class="btn-primary btn" data-toggle="modal" data-target="#assign-modal">Assign</button>
-			  <button id="assign-select-all" class="btn-primary btn">Select All</button>
+	<!-- 	
+	*********************
+			TABS
+	********************* 	 
+	-->
+	<div id="tabs" class="tab-content">
+
+		<!-- dataset tab -->
+		<div id="tab-datasets" class="tab-pane fade in active">
+			
+		  {% if data.my_datasets|length > 0 %}
+		  <h4 style="margin-bottom: 20px;">My Datasets</h4>
+			  {% for dataset in data.my_datasets %}
+			  		<div class="ds-container">
+			  			<div class="ds-select-container" id="{{dataset.author.name}}">
+							<input class="ds-checkbox" type="radio" name="data_set" value="{{dataset.id}}">
+							<p class="dataset-name">{{dataset.ds_name}} authored by {{dataset.author.name}} <a id="{{dataset.id}}" class="dataset-update-btn" style="font-size:12px;" data-toggle="modal" data-target="#dataset-edit-modal">edit</a></p>
+						</div>
+					</div>
+			  {% endfor %}
+		  {% endif %}
+
+		  {% if data.public_datasets|length > 0 %}
+			  <h4 style="margin-bottom: 20px;">Public Datasets</h4>
+			  {% for dataset in data.public_datasets %}
+			  		<div class="ds-container">
+			  			<div class="ds-select-container" id="{{dataset.author.name}}">
+							<input class="ds-checkbox" type="radio" name="data_set" value="{{dataset.id}}">
+							<p class="dataset-name">{{dataset.ds_name}} authored by {{dataset.author.name}}</p>
+						</div>
+					</div>
+			  {% endfor %}
+		  {% endif %}
+
+
+		  {% if data.authorized_datasets|length > 0 %}
+			  <h4 style="margin-bottom: 20px;">Authorized Datasets</h4>
+			  {% for dataset in data.authorized_datasets %}
+			  		<div class="ds-container">
+			  			<div class="ds-select-container" id="{{dataset.author.name}}">
+							<input class="ds-checkbox" type="radio" name="data_set" value="{{dataset.id}}">
+							<p class="dataset-name">{{dataset.ds_name}} authored by {{dataset.author.name}}</p>
+						</div>
+					</div>
+			  {% endfor %}
+		  {% endif %}
+
+
+		  {% if data.my_datasets|length > 0 or data.public_datasets|length > 0 or data.authorized_datasets|length > 0 %}
+			  <div id="btn-container">
+				  <button id="assign-btn" class="btn-primary btn"`>Assign</button>
+			  </div>
+		  {% else %}
+		  	  <h4>You don't have any dataset available for now. Please create a new one.</h4>
+		  {% endif %}
+		</div>
+
+
+		<!-- assignment tab -->
+		<div id="tab-assignments" class="tab-pane fade">
+		  {% for assignment in data.assignments %}
+		  <div id="{{assignment.id_}}" class="assignment-container well">
+			  	<h3 class="assignment-title">{{assignment.name}}&nbsp;<a class="btn-edit" data-toggle="modal" data-target="#edit-modal">Edit</a></h3>
+			  	<p class="assignment-ranker">Ranker: {{assignment.ranker}}</p>
+			  	<div style="display:block;">
+				  	<p class="assignment-params">Params:</p>
+				  	{% for key,value in assignment.params.items() %}
+				  		<p class="assignment-params assignment-param">{{key}}:{{value}}</p>
+				  	{% endfor %}
+			  	</div>
+		  	<div style="display:block; margin-top: 50px;">
+		  		{% for query in assignment.queries %}
+			  		<button id="{{assignment.id}}-{{query.content}}" class="show-hide-documents-btn btn btn-info">Query: {{query.content}}</button>
+		  		{% endfor %}
+		  	</div>
+
+		  	<table id="table-{{assignment.id}}" class="table table-striped">
+		  		<thead>
+		  			<tr>
+			  			<td>Document</td>
+			  			<td>Score</td>
+			  			<td>Relevant</td>
+			  			<td>Irrelevant</td>
+		  			</tr>
+		  		</thead>
+		  		<tbody></tbody>
+		  	</table>
 		  </div>
-		</div>
-		<div id="waiting" class="tab-pane fade">
-		  <h3>Waiting</h3>
-		  <p>Waiting events</p>
-		</div>
-		<div id="history" class="tab-pane fade">
-		  <h3>HISTORY</h3>
-		  <p>History events</p>
+		  {% endfor %}
 		</div>
 	</div>
 
 
-	<!-- modals -->
+	<!-- 	
+	*********************
+			MODALS
+	********************* 	 
+	-->
 
 	<!-- create class modal -->
 	<div class="modal fade" id="create-class-modal" role="dialog" style="margin-top:100px;">
@@ -94,7 +180,7 @@
 	</div><!-- end of class modal -->
 	
 	<!-- assign modal -->
-	<div class="modal fade" id="assign-modal" role="dialog" style="margin-top:100px;">
+	<div class="modal fade" id="assign-modal" role="dialog" style="margin-top:100px;" >
 	    <div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header" style="border-bottom: none;">
@@ -102,12 +188,22 @@
 				  <h3 class="modal-title">Assign</h3>
 				</div>
 				<div class="modal-body">
-	
 				  <div class="row">
-				    <label class="col-sm-2 control-label col-sm-offset-1">Query</label>
+				    <label class="col-sm-2 control-label col-sm-offset-1">Name</label>
 				    <div class="col-sm-8">
-				      <input id="assignment-query" class="form-control" type="text">
+				      <input id="assignment-name" class="form-control" type="text">
 				    </div>
+				  </div>
+
+				  <div class="row query-container">
+				  	<div>
+					    <label class="col-sm-2 control-label col-sm-offset-1">Query</label>
+					    <div class="col-sm-8">
+					      <input id="assignment-query" class="form-control" type="text">
+					    </div>
+					</div>
+
+				    <div class="col-sm-8 col-sm-offset-3 col-md-8 col-md-offset-3"><a id="add-query-btn">Add Query</a></div>
 				  </div>
 
 				  <div class="row">
@@ -140,25 +236,41 @@
 					  <div class="row">
 					    <label class="col-sm-2 control-label col-sm-offset-1">Params</label>
 					    <div class="col-sm-8">
-					      <input id="param-k1" type="text" placeholder="k1">
+					      <input class="form-control" id="param-k1" type="text" placeholder="k1">
 					    </div>
 					  </div>
 
 					  <div class="row">
-					    <label class="col-sm-2 control-label col-sm-offset-1"> </label>
+					    <label class="col-sm-2 control-label col-sm-offset-1" style="color:#fff;">s</label>
 					    <div class="col-sm-8">
-					      <input id="param-b" type="text" placeholder="b">
+					      <input class="form-control" id="param-b" type="text" placeholder="b">
 					    </div>
 					  </div>
 
 					  <div class="row">
-					    <label class="col-sm-2 control-label col-sm-offset-1"> </label>
+					    <label class="col-sm-2 control-label col-sm-offset-1" style="color:#fff;">s</label>
 					    <div class="col-sm-8">
-					      <input id="param-k3" type="text" placeholder="k3">
+					      <input class="form-control" id="param-k3" type="text" placeholder="k3">
 					    </div>
 					  </div>
 				  </div>
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Num Results</label>
+				    <div class="col-sm-8">
+				      <input type="number" class="form-control" id="assignment-num-of-results">
+				    </div>
+				  </div>
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Deadline</label>
+				    <div class="col-sm-8">
+				      <input type="text" class="form-control" id="assignment-deadline" placeholder="mm/dd/yy">
+				    </div>
+				  </div>
 				</div>
+
+
 
 				<div class="modal-footer" style="border-top: none;">
 				  <button id="create-assignment-btn" type="button" class="btn btn-primary" data-dismiss="modal">Create</button>
@@ -166,7 +278,152 @@
 				</div>
 			</div>
 		</div>
-	</div><!-- end of class modal -->
+	</div><!-- end of assign modal -->
+
+	<!-- assign successful model -->
+	<div class="modal fade" id="assign-notification-modal" role="dialog">
+	    <div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="border-bottom: none;"> 
+				  <h3 class="modal-title">Assign</h3>
+				</div>
+				<div class="modal-body">
+					<h4>New Assignment has been created.</h4>
+				</div>
+				<div class="modal-footer" style="border-top: none;">
+				  <button id="create-assignment-complete-btn" type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+				</div>
+			</div>
+		</div>
+	</div><!-- end of ds detail modal -->
+
+
+
+	<!-- assignment update modal -->
+	<div class="modal fade" id="edit-modal" role="dialog" style="margin-top:100px;">
+	    <div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="border-bottom: none;">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h3 class="modal-title">Update Assignment</h3>
+				</div>
+				<div class="modal-body">
+	
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Name</label>
+				    <div class="col-sm-8">
+				      <input id="update-name" class="form-control" type="text">
+				    </div>
+				  </div>
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Query</label>
+				    <div class="col-sm-8">
+				      <input id="update-query" class="form-control" type="text">
+				    </div>
+				  </div>
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Class</label>
+				    <div class="col-sm-8">
+				      <select id="update-class">
+				      	{% for class_ in data.classes %}
+						<option>{{class_}}</option>
+						{% endfor %}
+				      </select>
+				    </div>
+				  </div>
+					
+				  <!-- ranker -->
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Ranker</label>
+				    <div class="col-sm-8">
+				      <select id="update-ranker">
+				      	<option value=""></option>
+						<option value="OkapiBM25">OkapiBM25</option>
+						<option value="JelinekMercer">JelinekMercer</option>
+						<option value="DirichletPrior">DirichletPrior</option>
+						<option value="AbsoluteDiscount">AbsoluteDiscount</option>
+						<option value="PivotedLength">PivotedLength</option>
+				      </select>
+				    </div>
+				  </div>
+
+				  <!-- params -->
+				  <div id="update-params">
+					  
+				  </div>
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Num Results</label>
+				    <div class="col-sm-8">
+				      <input type="number" class="form-control" id="update-num-of-results">
+				    </div>
+				  </div>
+
+				  <div class="row">
+				    <label class="col-sm-2 control-label col-sm-offset-1">Deadline</label>
+				    <div class="col-sm-8">
+				      <input type="text" class="form-control" id="update-deadline" placeholder="mm/dd/yy">
+				    </div>
+				  </div>
+				</div>
+
+
+
+				<div class="modal-footer" style="border-top: none;">
+				  <button id="update-assignment-btn" type="button" class="btn btn-primary" data-dismiss="modal">Update</button>
+				  <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- dataset update modal -->
+	<div class="modal fade" id="dataset-edit-modal" role="dialog" style="margin-top:100px;">
+	    <div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="border-bottom: none;">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h3 class="modal-title">Update Dataset</h3>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<label class="col-sm-2 control-label col-sm-offset-1">Name</label>
+						<div class="col-sm-8">
+						<input id="dataset-update-name" class="form-control" type="text">
+						</div>
+					</div>
+
+					<div class="row">
+						<label class="col-sm-2 control-label col-sm-offset-1">Privacy</label>
+						<div class="col-sm-8">
+							<select id="dataset-update-privacy">
+								<option selected value=""></option>
+								<option value="public">Public</option>
+								<option value="private">Private</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="row" id="dataset-update-collaborators">
+						<label class="col-sm-2 control-label col-sm-offset-1">Collaborators</label>
+						<div class="col-sm-8">
+							<input id="dataset-update-collaborator" class="form-control collaborator" type="text">
+						</div>
+						<div class="col-sm-8 col-sm-offset-3" style="margin-top:10px;">
+							<a col-sm-8 col-sm-offset-3 id="btn-add-collaborator">Add</a>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer" style="border-top: none;">
+				<button id="update-dataset-btn" type="button" class="btn btn-primary">Update</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<!-- end of modals -->
 </div>

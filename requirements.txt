@@ -6,3 +6,4 @@ flask-bcrypt==0.7.1
 flask-redis
 pytoml==0.1.11
 metapy==0.0.1.dev6
+flask-paginate==0.5.0

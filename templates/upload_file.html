@@ -7,15 +7,26 @@
 		
 		<form id="files-form" action="/upload" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
 
-		<div id="dataset-input" class="row">
-			<label>DataSet Name:</label>
-			<input type="text" name="ds_name">
-		</div>
+			<div id="dataset-input" class="row">
+				<label>DataSet Name:</label>
+				<input type="text" name="ds_name">
+			</div>
+
+			<div id="dataset-privacy" class="row">
+				<label>Privacy:</label>
+				<select id="dataset-privacy" name="ds_privacy">
+					<option selected value="public">Public</option>
+					<option value="private">Private</option>
+				</select>
+			</div>
 
 			<div class="container-fluid files-container">
+				<table class="table table-striped">
+					<tbody></tbody>
+				</table>
 			</div>
 			<input id="files" name="file" multiple="" type="file" style="display: none">
-			<input id="author-input" type="text" name="author" value="dev" style="display: none">
+			<input type="text" name="author" value="{{author.name}}" style="display:none;">
 			<input id="hidden-submit-btn" type="submit" style="display: none">
 		</form>
 

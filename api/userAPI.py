@@ -1,12 +1,11 @@
-from flask import make_response, render_template, current_app, jsonify, abort, session
+from flask import make_response, render_template, current_app, redirect, jsonify, abort, session
 from flask_restful import Resource, reqparse
 from mongoengine.errors import NotUniqueError, ValidationError
+from util.userAuth import login_auth_required
 from schema.User import User
 from schema import redis_store
-from util.userAuth import auth_required
 from util.exception import InvalidUsage
 import json
-import Cookie
 import os
 
 
@@ -29,6 +28,7 @@ class UserAPI(Resource):
 
         user = User(name=name, email=email, group=group)
         user.hash_password(password)
+
         try:
             user.save()
         except ValidationError as e:
@@ -43,13 +43,17 @@ class UserAPI(Resource):
 
 
 class LoginAPI(Resource):
-    # @auth_required
-    # def get(self):
-    #     user_id = session['user_id']
-    #     user = User.objects(id=user_id).first()
-    #     # token = user.generate_auth_token()
-    #     # redis_store.set(user_id, token)
-    #     headers = {'Content-Type': 'text/html'}
+    @login_auth_required
+    def get(self):
+        # nav user to right page
+        user_id = session['user_id']
+        user = User.objects(id=user_id).first()
+
+        if user.group == "instructor":
+            return redirect("/instructor")
+        elif user.group == "annotator":
+            return redirect("/annotator")
+
 
 
     #     return {'token': token}

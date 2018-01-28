@@ -1,0 +1,109 @@
+a {
+	text-decoration: none;
+	color: white;
+}
+
+a:hover{
+	text-decoration: none;
+	color: white;
+}
+
+.clickable-text{
+	cursor: pointer;
+}
+
+
+.container{
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	background-color: #000;
+}
+
+#content{
+	height: 800px;
+	background-color: #fff;
+	padding-top: 50px;
+}
+
+
+/*side bar*/
+.sidebar{
+	height: 800px;
+	background-color: #111122;
+	border-radius: 2px;
+	padding: 0px;
+}
+
+
+#sidebar-title{
+	height: 100px;
+	width: 100%;
+	border-bottom: 1px solid #ddd;
+	text-align: left | center;
+}
+
+#sidebar-title img{
+	height: 50px;
+	width: 50px;
+	margin-top: 25px;
+	margin-left: 20px;
+	display: inline-block;
+}
+
+#sidebar-title p{
+	color: #fff;
+	font-size: 24px;
+	margin-left: 20px;
+	margin-top: 25px;
+	line-height: 50px;
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.sidebar-list{
+	width: 100%;
+	padding: 0px;
+}
+
+.sidebar-list .main-bullet{
+	color: #fff;
+	font-size: 18px;
+	font-weight: bold;
+	margin-left: 20px;
+	margin-top: 15px;
+}
+
+.sub-bullets-container{
+	display: none;
+}
+
+.sidebar-list .sub-bullet{
+	color: #ddd;
+	font-size: 15px;
+	margin-top: 5px;
+	font-family: normal;
+}
+
+
+
+
+/*assignment content*/
+#content{
+	padding-top: 20px;
+}
+
+.assignment-info{
+	color: black;
+}
+
+.important{
+	color: #ff0000;
+}
+
+
+
+/*modals*/
+.modal-body p{
+	font-size: 16px;
+}

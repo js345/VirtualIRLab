@@ -1,6 +1,5 @@
 from flask import make_response, render_template, current_app, jsonify
 from flask_restful import Resource, reqparse
-from util.userAuth import auth_required
 from schema.Class import Class
 from schema.User import User
 

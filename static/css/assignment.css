@@ -1,0 +1,73 @@
+/*information panel*/
+#info-panel{
+	width: 800px;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+#new-query-container input{
+	margin-top: 20px;
+}
+
+#new-query-container button{
+	margin-top: 10px
+}
+
+
+
+/*result panel*/
+.result-panel{
+	width: 800px;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+table{
+	margin-top: 20px;
+}
+
+table a{
+	cursor: pointer;
+}
+
+td a{
+	font-size: 16px;
+	font-weight: normal;
+	padding-left: 20px;
+}
+
+.label{
+	float: right;
+	color: #000;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+.label div{
+	float: left;
+}
+
+#submit-btn{
+	width: 200px;
+	margin: 20px auto;
+	display: block;
+}
+
+
+/*modals*/
+.modal{
+	margin-top: 150px;
+}
+
+.modal-content{
+	border-radius: 5px;
+}
+
+.modal-header{
+	border: none;
+	background-color: #dddddd;
+}
+
+.modal-footer{
+	border: none;
+}

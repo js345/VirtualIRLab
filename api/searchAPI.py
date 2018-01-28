@@ -24,6 +24,8 @@ class SearchAPI(Resource):
 		ranker = args['ranker']
 		num_results = args['num_results']
 		params = args['params']
+
+		
 		# To do: check for invalid access here
 		# ds = DataSet.objects(author=author, ds_name=ds_name)
 

@@ -1,0 +1,14 @@
+index = "ds_3-idx"
+prefix = "."
+corpus = "file.toml"
+dataset = "ds_3"
+
+[[analyzers]]
+ngram = 1
+method = "ngram-word"
+
+[[analyzers.filter]]
+type = "icu-tokenizer"
+
+[[analyzers.filter]]
+type = "lowercase"

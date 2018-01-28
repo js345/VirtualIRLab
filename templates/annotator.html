@@ -1,0 +1,76 @@
+{% extends "content_layout.html" %}
+
+{% block content %}
+	<!-- css -->
+	<link href="{{ url_for('static', filename='css/annotator.css') }}" rel="stylesheet"/>
+
+	<script src="{{ url_for('static', filename='javascript/annotator.js') }}"></script>
+
+	<script type="text/javascript">
+		{% for assignment in data.assignments %}
+			assignments["{{assignment.name}}"] = {{assignment|tojson}};
+		{% endfor %}
+	</script>
+
+	<div class="container-fluid student-page-container">
+		<div class="row">
+			<div class="col-md-2 sidebar">
+				<ul class="sidebar-list">
+					<li id="sidebar-title">
+						<img src="{{url_for('static', filename='image/icon_annotator.png')}}">
+						<p>{{data.user.name}}</p>
+					</li>
+					<li class="main-bullet clickable-text">Schedual</li>
+					<li id="assignments" class="main-bullet collapse-able clickable-text">Assignments</li>
+						<ul id="assignments-children" class="sub-bullets-container">
+							{% for assignment in data.assignments %}
+							<li id="{{assignment.name}}" class="sub-bullet clickable-text">{{assignment.name}}</li>
+							{% endfor %}
+						</ul>
+					
+					<li class="main-bullet clickable-text">Scores</li>
+				</ul>
+			</div>
+			<div class="col-md-10" id="content">
+				<div id="content-welcome">
+					<h2>Welcome {{data.user.name}}</h2>
+				</div>
+
+				<div id="content-assignment" style="display: none;">
+					<div class="well assignment-info">
+						<h1 id="assignment-name">Assignment 10</h1>
+						<h4 id="assignment-author" style="margin-top: 30px;">Author: Chengxiang Zhai</h4>
+						<h4 id="assignment-query">Query: Sample Query</h4>
+						<h4 id="assignment-ranker">Ranker: Okapi BM25</h4>
+						<h4 id="assignment-deadline" class="important">Due Data: May 4, 2017</h4>	
+					</div>
+
+					<button id="nav-assignment-btn" class="btn-lg btn-primary">Start</button>
+					<button id="play-btn" class="btn-lg btn-primary" style="margin-left: 10px;">Play</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+
+	<!-- modals -->
+	<div class="modal fade" id="alert-modal" role="dialog" style="margin-top:100px;">
+	    <div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="border-bottom: none;">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h3 class="modal-title">Warning</h3>
+				</div>
+				<div class="modal-body">
+				  <p>You have finished this assignment already, your past submission will be removed if you start over.</p>
+				</div>
+				<div class="modal-footer" style="border-top: none;">
+				  <button id="nav-assignment-modal-btn" type="button" class="btn btn-primary" data-dismiss="modal">Start</button>
+				  <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div><!-- end of class modal -->
+
+{% endblock %}
