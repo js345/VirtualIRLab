@@ -61,7 +61,7 @@ class AssignAPI(Resource):
         assignment.deadline = deadline
         assignment.save()
 
-        print assignment.id
+        # print assignment.id
 
             
         return str(assignment.id)
@@ -101,7 +101,7 @@ class AssignmentUpdateAPI(Resource):
         headers = {'Content-Type': 'application/json'}
         args = parser.parse_args()
         assignment_id = args['assignment_id']
-        print assignment_id
+        # print assignment_id
 
         assignment = Assignment.objects(id=assignment_id).first()
 

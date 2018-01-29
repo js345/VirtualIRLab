@@ -39,8 +39,8 @@ class AnnotationAPI(Resource):
 
                 dataset = assignment.dataset
 
-                print dataset.id
-                print file_name
+                # print dataset.id
+                # print file_name
 
                 document = Document.objects(dataset=dataset) \
                             .filter(name=file_name).first()
