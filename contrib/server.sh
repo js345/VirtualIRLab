@@ -3,7 +3,7 @@
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
-APPDIR=/home/xyu37/metapy-demos
+APPDIR=/home/xyu37/VirtualIRLab
 PIDFILE=tmp/pids/server.pid
 CONFIGFILE=contrib/server.cfg
 
