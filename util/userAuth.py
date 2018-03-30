@@ -1,8 +1,8 @@
 from flask import abort, current_app, request
-from schema import redis_store
-from itsdangerous import (TimedJSONWebSignatureSerializer
-                          as Serializer, BadSignature, SignatureExpired)
 from functools import wraps
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
+from schema import redis_store
+
 
 def auth_required(f):
     @wraps(f)

@@ -1,5 +1,3 @@
-
-
 class InvalidUsage(Exception):
     status_code = 400
 
