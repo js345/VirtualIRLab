@@ -1,17 +1,16 @@
 from flask import Flask, jsonify
-from flask_restful import Api
+from flask import render_template
 from flask_cors import CORS
-from schema import db, redis_store
-from api.searchAPI import SearchAPI
+from flask_restful import Api
+
 from api.annotationAPI import AnnotationAPI
-from api.uploadAPI import UploadAPI
-from api.userAPI import UserAPI, LoginAPI
 from api.assignmentAPI import AssignmentAPI, AddQueryAPI
 from api.instructorAPI import InstructorAPI
-
+from api.searchAPI import SearchAPI
+from api.uploadAPI import UploadAPI
+from api.userAPI import UserAPI, LoginAPI
+from schema import db, redis_store
 from util.exception import InvalidUsage
-
-from flask import render_template
 
 app = Flask(__name__, static_folder='static/', static_url_path='')
 app.config.from_object('config')
@@ -33,18 +32,20 @@ api.add_resource(InstructorAPI, '/instructor')
 
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
-	response = jsonify(error.to_dict())
-	response.status_code = error.status_code
-	return response
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
+
 
 @app.route("/student")
 def student_page():
-	return render_template("student.html")
+    return render_template("student.html")
+
 
 @app.route("/")
 def main():
-	return render_template("index.html")
+    return render_template("index.html")
 
 
 if __name__ == '__main__':
-	app.run(host='127.0.0.1')
+    app.run(host='127.0.0.1')

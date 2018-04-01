@@ -25,8 +25,10 @@ $(document).ready(function(){
 		})
 		.success(function(data){
 			if(data.state == "success"){
+
 				console.log("verify sucessfully");
-				var url = "/" + data.group;
+				var url = "/" + data.role;
+				console.log(url)
 				window.location = url;
 			}
 			else{
@@ -42,14 +44,13 @@ $(document).ready(function(){
 		var email = $("#signup-email").val();
 		var name = $("#signup-name").val();
 		var password = $("#signup-password").val();
-		var reenter = $("reenter-password").val();
-		var group = $("input[name='group']:checked").val();
+		var role = $("input[name='group']:checked").val();
 
 		var data = {
 			"email" : email,
 			"name" : name,
 			"password" : password,
-			"group" : group
+			"role" : role
 		};
 
 		// send data
@@ -65,10 +66,3 @@ $(document).ready(function(){
 		});
 	});
 });
-
-
-
-// sign up validation
-function validation(email, password, reenter){
-
-}

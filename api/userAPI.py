@@ -23,9 +23,6 @@ class UserAPI(Resource):
         role = args['role']
         password = args['password']
 
-        if email is None or password is None:
-            abort(400)
-
         user = User(name=name, email=email, role=role)
         user.hash_password(password)
 
@@ -49,15 +46,10 @@ class LoginAPI(Resource):
         # nav user to right page
         user_id = session['user_id']
         user = User.objects(id=user_id).first()
-
         if user.role == "instructor":
             return redirect("/instructor")
         elif user.role == "annotator":
             return redirect("/annotator")
-
-
-
-    #     return {'token': token}
 
     '''
         Login Validation
@@ -67,7 +59,6 @@ class LoginAPI(Resource):
         args = userParser.parse_args()
         email = args['email']
         password = args['password']
-
 
         if email is None or password is None:
             abort(400)
@@ -89,7 +80,6 @@ class LoginAPI(Resource):
         # store token to session
         session['token'] = token
         session['user_id'] = str(user.id)
-
         return {
             "state": "success",
             "role": user.role

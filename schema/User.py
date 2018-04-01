@@ -2,7 +2,7 @@ from flask import current_app
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from schema import db, bcrypt
 
-ROLES = ('annotator', 'instructor', 'admin')
+ROLES = ('annotator', 'instructor')
 
 
 class User(db.DynamicDocument):
