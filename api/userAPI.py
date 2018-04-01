@@ -20,7 +20,7 @@ class UserAPI(Resource):
             user.hash_password(args['password'])
             user.save()
         except ValidationError:
-            return {'message': 'Wrong value'}, 400
+            return {'message': 'Validation failed!'}, 400
         except NotUniqueError:
             return {'message': 'The account is already registered!'}, 400
         return {'message': 'You have successfully created an account!'}, 201
@@ -41,7 +41,7 @@ class LoginAPI(Resource):
 
         user = User.objects(email=email).first()
         if not user or not user.check_password(password):
-            return {'state': 'failed', 'error': 'Email and password do not match'}
+            return {'state': 'failed', 'error': 'Email and password do not match!'}
 
         # get token
         token = user.generate_auth_token()
