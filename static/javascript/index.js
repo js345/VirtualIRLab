@@ -21,48 +21,39 @@ $(document).ready(function(){
 			type: "POST",
 			dataType: "json",
 			data: JSON.stringify(data),
-			url: "/login"
+			url: "/login",
+			success: function(data){
+                if(data.state == "success"){
+                    console.log("verify successfully");
+                    var url = "/" + data.role;
+                    console.log(url)
+                    window.location = url;
+                }
+                else{
+                    console.log(data)
+                    alert(data.error);
+                }
+		    }
 		})
-		.success(function(data){
-			if(data.state == "success"){
-
-				console.log("verify sucessfully");
-				var url = "/" + data.role;
-				console.log(url)
-				window.location = url;
-			}
-			else{
-				alert(data.error);
-			}
-		});
 	});
-
 
 	// signup
 	$("#signup-btn").click(function(){
-		// prepare data
-		var email = $("#signup-email").val();
-		var name = $("#signup-name").val();
-		var password = $("#signup-password").val();
-		var role = $("input[name='group']:checked").val();
-
 		var data = {
-			"email" : email,
-			"name" : name,
-			"password" : password,
-			"role" : role
+			"email" : $("#signup-email").val(),
+			"name" : $("#signup-name").val(),
+			"password" : $("#signup-password").val(),
+			"role" : $("input[name='group']:checked").val()
 		};
 
-		// send data
 		$.ajax({
 			type: "POST",
-			dataType: 'json',
 			url: "/register",
 			data: JSON.stringify(data),
-			contentType: 'application/json; charset=utf-8'
+			contentType: 'application/json; charset=utf-8',
+			complete: function(data) {
+                alert(JSON.parse(data.responseText)['message']);
+			}
 		})
-		.success(function(data){
-			console.log(data);
-		});
 	});
 });
