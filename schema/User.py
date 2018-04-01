@@ -1,12 +1,13 @@
-from schema import db, bcrypt
 from flask import current_app
-from itsdangerous import (TimedJSONWebSignatureSerializer
-                          as Serializer)
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from schema import db, bcrypt
+
+ROLES = ('student', 'instructor', 'admin')
 
 
 class User(db.DynamicDocument):
     name = db.StringField(required=True, unique=True)
-    group = db.IntField(required=True)
+    role = db.StringField(required=True, choices=ROLES)
     password_hash = db.StringField(required=True)
     email = db.StringField(required=True, unique=True)
 
@@ -17,5 +18,5 @@ class User(db.DynamicDocument):
         return bcrypt.check_password_hash(self.password_hash, password)
 
     def generate_auth_token(self):
-        s = Serializer(current_app.config.get('SECRET_KEY'),expires_in=99999)
+        s = Serializer(current_app.config.get('SECRET_KEY'), expires_in=99999)
         return s.dumps(str(self.id))
