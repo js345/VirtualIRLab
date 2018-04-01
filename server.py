@@ -41,7 +41,7 @@ def handle_invalid_usage(error):
 def student_page():
 	return render_template("student.html")
 
-@app.route("/index")
+@app.route("/")
 def main():
 	return render_template("index.html")
 

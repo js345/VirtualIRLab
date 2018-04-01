@@ -1,6 +1,5 @@
 from flask import make_response, render_template, current_app, jsonify
 from flask_restful import Resource, reqparse
-from util.userAuth import auth_required
 
 from schema.DataSet import DataSet
 
@@ -21,7 +20,6 @@ parser.add_argument('creator', type=str)
 
 
 class AssignmentAPI(Resource):
-    @auth_required
 
     def get(self):
         name_dict = {}
