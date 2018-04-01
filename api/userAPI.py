@@ -1,9 +1,9 @@
-from flask import redirect, session
+from flask import redirect, url_for
+from flask_login import login_user, login_required, logout_user
 from flask_restful import Resource, reqparse
 from mongoengine.errors import NotUniqueError, ValidationError
 
 from schema.User import User
-from util.userAuth import login_auth_required
 
 userParser = reqparse.RequestParser()
 userParser.add_argument('name', type=str)
@@ -12,40 +12,32 @@ userParser.add_argument('email', type=str)
 userParser.add_argument('role', type=str)
 
 
-class UserAPI(Resource):
+class RegisterAPI(Resource):
     def post(self):
         args = userParser.parse_args()
         try:
-            user = User(name=args['name'], email=args['email'], role=args['role'])
-            user.hash_password(args['password'])
-            user.save()
+            User(args['name'], args['email'], args['role'], User.hash_password(args['password'])).save()
+            return {'message': 'New account registered!'}, 200
         except ValidationError:
             return {'message': 'Validation failed!'}, 400
         except NotUniqueError:
-            return {'message': 'The account is already registered!'}, 400
-        return {'message': 'You have successfully created an account!'}, 201
+            return {'message': 'Account already registered!'}, 400
 
 
 class LoginAPI(Resource):
-    @login_auth_required
-    def get(self):
-        # navigate user to right page
-        user_id = session['user_id']
-        user = User.objects(id=user_id).first()
-        return redirect('/' + user.role)
-
     def post(self):
         args = userParser.parse_args()
-        email = args['email']
-        password = args['password']
+        user = User.objects(email=args['email']).first()
+        if not user:
+            return {'message': 'Invalide email!'}, 404
+        if not user.check_password(args['password']):
+            return {'message': 'Wrong password!'}, 404
+        login_user(user)
+        return {'role': user.role}, 200
 
-        user = User.objects(email=email).first()
-        if not user or not user.check_password(password):
-            return {'state': 'failed', 'error': 'Email and password do not match!'}
 
-        # get token
-        token = user.generate_auth_token()
-        # store token to session
-        session['token'] = token
-        session['user_id'] = str(user.id)
-        return {'state': 'success', 'role': user.role}
+class LogoutAPI(Resource):
+    @login_required
+    def post(self):
+        logout_user()
+        return redirect(url_for('main'))
