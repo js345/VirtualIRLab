@@ -1,4 +1,4 @@
-from flask import redirect, url_for
+from flask import redirect, url_for, flash
 from flask_login import login_user, login_required, logout_user
 from flask_restful import Resource, reqparse
 from mongoengine.errors import NotUniqueError, ValidationError
@@ -17,11 +17,13 @@ class RegisterAPI(Resource):
         args = userParser.parse_args()
         try:
             User(args['name'], args['email'], args['role'], User.hash_password(args['password'])).save()
-            return {'message': 'New account registered!'}, 200
+            msg = 'New account registered!'
         except ValidationError:
-            return {'message': 'Validation failed!'}, 400
+            msg = 'Validation failed!'
         except NotUniqueError:
-            return {'message': 'Account already registered!'}, 400
+            msg = 'Account already registered!'
+        flash(msg)
+        return redirect(url_for('main'))
 
 
 class LoginAPI(Resource):
@@ -29,15 +31,18 @@ class LoginAPI(Resource):
         args = userParser.parse_args()
         user = User.objects(email=args['email']).first()
         if not user:
-            return {'message': 'Invalide email!'}, 404
+            flash('Invalid Email')
+            return redirect(url_for('main'))
         if not user.check_password(args['password']):
-            return {'message': 'Wrong password!'}, 404
+            flash('Wrong Password')
+            return redirect(url_for('main'))
         login_user(user)
-        return {'role': user.role}, 200
+        return redirect(url_for(user.role + 'api'))
 
 
 class LogoutAPI(Resource):
     @login_required
     def post(self):
         logout_user()
+        flash('Log out')
         return redirect(url_for('main'))
