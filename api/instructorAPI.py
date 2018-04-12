@@ -1,15 +1,18 @@
-from flask import make_response, render_template, redirect, url_for
-from flask_login import login_required, current_user
+from flask import make_response, render_template
+from flask_login import login_required
 from flask_restful import Resource
+
+from schema.DataSet import DataSet
+from util.util import check_role
 
 
 class InstructorAPI(Resource):
     @login_required
     def get(self):
-        if not current_user.is_authenticated or current_user.role != 'instructor':
-            return redirect(url_for(current_user.role + 'api'))
-        """
-        Render Instructor UI
-        """
-        headers = {'Content-Type': 'text/html'}
-        return make_response(render_template('instructor.html'), 200, headers)
+        check_role('instructor')
+
+        # datasets = [('a', '1'), ('b', '2')]
+        datasets = [(d.name, d.author) for d in DataSet.objects()]
+
+        assignments = []
+        return make_response(render_template('instructor.html', datasets=datasets, assignments=assignments))

@@ -1,33 +1,59 @@
 {% extends "content_layout.html" %}
-
 {% block content %}
 <div class="container">
-	<button class="btn-lg btn-primary">Upload Dataset</button>
 
-	<br>
-	<br>
-	<h1>History</h1>
-	<br>
 
-	<ul class="nav nav-tabs">
-		<li class="active"><a data-toggle="tab" href="#upcoming">Upcoming</a></li>
-		<li><a data-toggle="tab" href="#waiting">Waiting</a></li>
-		<li><a data-toggle="tab" href="#history">History</a></li>
-	</ul>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
 
-	<div class="tab-content">
-		<div id="upcoming" class="tab-pane fade in active">
-		  <h3>UPCOMING</h3>
-		  <p>Upcoming events</p>
-		</div>
-		<div id="waiting" class="tab-pane fade">
-		  <h3>Waiting</h3>
-		  <p>Waiting events</p>
-		</div>
-		<div id="history" class="tab-pane fade">
-		  <h3>HISTORY</h3>
-		  <p>History events</p>
-		</div>
-	</div>
+    <script type="text/javascript">
+    $(window).on('load',function(){
+        $('#wrong').modal('show');
+    });
+    </script>
+
+    <div id="wrong" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {% endif %}
+    {% endwith %}
+
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="dataset-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+               aria-selected="true">Datasets</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="assignment-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+               aria-selected="false">Assignments</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="dataset-tab">
+            <a class="btn btn-primary" href="/upload">Upload</a>
+            {% if datasets|length > 0 %}
+            {% for dataset in datasets %}
+            <h6>{{dataset[0]}} by {{dataset[1]}}</h6>
+            {% endfor %}
+            {% else %}
+            <h6>No dataset found in system.</h6>
+            {% endif %}
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="assignment-tab">...</div>
+    </div>
 </div>
 {% endblock %}
