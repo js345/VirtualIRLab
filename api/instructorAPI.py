@@ -12,7 +12,7 @@ class InstructorAPI(Resource):
         check_role('instructor')
 
         # datasets = [('a', '1'), ('b', '2')]
-        datasets = [(d.name, d.author) for d in DataSet.objects()]
+        datasets = [(d.name, d.author.name) for d in DataSet.objects()]
 
         assignments = []
         return make_response(render_template('instructor.html', datasets=datasets, assignments=assignments))

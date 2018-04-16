@@ -44,10 +44,17 @@
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="dataset-tab">
+            <hr class="my-4">
             <a class="btn btn-primary" href="/upload">Upload</a>
+            <hr class="my-4">
             {% if datasets|length > 0 %}
             {% for dataset in datasets %}
-            <h6>{{dataset[0]}} by {{dataset[1]}}</h6>
+            <form action="upload" method="post">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="ds_name" value="{{dataset[0]}}">
+                <h6>{{dataset[0]}} by {{dataset[1]}}</h6>
+                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+            </form>
             {% endfor %}
             {% else %}
             <h6>No dataset found in system.</h6>
