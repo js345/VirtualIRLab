@@ -1,11 +1,11 @@
-from flask import make_response, render_template, current_app, jsonify, request
+from flask import make_response, jsonify
 from flask_restful import Resource, reqparse
 
 from schema.Annotation import Annotation
-from schema.User import User
 from schema.DataSet import DataSet
 from schema.Query import Query
-import json
+from schema.User import User
+
 parser = reqparse.RequestParser()
 parser.add_argument('user', type=str)
 parser.add_argument('dataset', type=str)
@@ -14,18 +14,16 @@ parser.add_argument('doc', type=dict, action="append")
 
 
 class AnnotationAPI(Resource):
-
     def post(self):
-        
         args = parser.parse_args()
         query = args['query']
         user = args['user']
         data_id = args['dataset']
         doc = args['doc']
         headers = {'Content-Type': 'application/json'}
-        annotator = User.objects(id = user)
-        ds = DataSet.objects(id = data_id)
-        q_id = Query.objects(id = query)
+        annotator = User.objects(id=user)
+        ds = DataSet.objects(id=data_id)
+        q_id = Query.objects(id=query)
         for pair in doc:
             annotation = Annotation()
             annotation.annotator = annotator[0]
