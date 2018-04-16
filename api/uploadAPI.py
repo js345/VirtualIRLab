@@ -40,6 +40,8 @@ class UploadAPI(Resource):
             for doc in Document.objects(data_set=dataset):
                 doc.delete()
             dataset.delete()
+            if not DataSet.objects(author=author).first():
+                shutil.rmtree(author_dir)
             flash('Dataset deleted.')
             return redirect(url_for('instructorapi'))
         else:
