@@ -18,7 +18,7 @@ parser.add_argument('ds_name', type=str)
 parser.add_argument('_method', type=str)
 
 
-class UploadAPI(Resource):
+class DatasetAPI(Resource):
     @login_required
     def get(self):
         check_role('instructor')

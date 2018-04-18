@@ -7,7 +7,7 @@ from api.annotationAPI import AnnotationAPI
 from api.assignmentAPI import AssignmentAPI, AddQueryAPI
 from api.instructorAPI import InstructorAPI
 from api.searchAPI import SearchAPI
-from api.uploadAPI import UploadAPI
+from api.datasetAPI import DatasetAPI
 from api.userAPI import RegisterAPI, LoginAPI, LogoutAPI
 from schema import db, redis_store, User
 from util.exception import InvalidUsage
@@ -37,7 +37,7 @@ api.add_resource(LogoutAPI, '/logout')
 
 api.add_resource(SearchAPI, '/search/<string:author>/<string:ds_name>')
 api.add_resource(AnnotationAPI, '/annotation')
-api.add_resource(UploadAPI, '/upload')
+api.add_resource(DatasetAPI, '/upload')
 api.add_resource(AssignmentAPI, '/assign')
 api.add_resource(AddQueryAPI, '/newquery')
 api.add_resource(InstructorAPI, '/instructor')
