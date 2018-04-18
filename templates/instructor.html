@@ -80,7 +80,7 @@
                     <h6>New Assignment</h6>
                     <input type="hidden" name="ds_name" id="assignment_ds_name">
 
-                    <input type="text" name="assignment-name" class="form-control" placeholder="Assignment Name">
+                    <input type="text" name="assignment_name" class="form-control" placeholder="Assignment Name" required>
 
                     <br>
                     <div class="query">
@@ -152,9 +152,7 @@ $("#assignment-ranker").change(function(){
 
     var html = "";
     for(var i = 0; i < params.length; i++){
-        html += "<div> \
-                      <input class='form-control' name=param[] id='param-" + params[i] + "' type='text' placeholder='" + params[i] + "'> \
-                  </div>"
+        html += "<div><input class='form-control' name=param[] type='text' placeholder='" + params[i] + "' required></div>"
     }
     $("#assignment-params").html(html);
 })
@@ -164,7 +162,6 @@ $("#assignment-ranker").change(function(){
 
 <!--Work on AssignmentAPI so instructor can create and view assignment-->
 <!--Create-->
-<!-- - Frontend: form for rankers and queries-->
 <!-- - Backend: decide the annotators-->
 <!--View-->
 <!-- - Frontend: show query results - should be able to reuse some stuff-->
