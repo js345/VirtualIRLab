@@ -1,8 +1,10 @@
 from flask import make_response, render_template, flash, redirect, url_for
-from flask_login import login_required
+from flask_login import login_required, current_user
 from flask_restful import Resource, reqparse
 
 from schema.DataSet import DataSet
+from schema.User import User
+from schema.Query import Query
 from util.util import check_role
 
 parser = reqparse.RequestParser()
@@ -27,20 +29,35 @@ class InstructorAPI(Resource):
     @login_required
     def post(self):
         check_role('instructor')
-
         args = parser.parse_args()
-        assignment_name = args['assignment_name']
-        dataset_name = args['ds_name']
-        queries = [q for q in args['query[]'] if q != '']
-        ranker = args['ranker']
-        params = self.generate_params_dict(ranker, args['param[]'])
+        if args['_method'] != 'DELETE':
+            queries = [q for q in args['query[]'] if q != '']
+            if not queries:
+                flash('Empty Query!')
+                return redirect(url_for('instructorapi'))
 
-        if not queries:
-            flash('Empty Query!')
+            ranker = args['ranker']
+            assignment_name = args['assignment_name']
+            dataset_name = args['ds_name']
+            params = self.generate_params_dict(ranker, args['param[]'])
+            instructor = User.objects(email=current_user.email).first()
+
+            flash('Assignment Created!')
             return redirect(url_for('instructorapi'))
+        else:
+            pass
 
-        flash('Assignment Created!')
-        return redirect(url_for('instructorapi'))
+    @staticmethod
+    def generate_queries(queries):
+        result = []
+        for q in queries:
+            try:
+                query = Query(q)
+                query.save()
+                result.append(query)
+            finally:
+                pass
+        return result
 
     @staticmethod
     def generate_params_dict(ranker, params):
