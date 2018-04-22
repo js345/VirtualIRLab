@@ -39,7 +39,6 @@ function render_result(data){
 	$("#results-container").show();
 }
 
-
 function create_search_package(){
 	var query = $("#query_text").val();
 	var url_ = "/search/dev/testdata";

@@ -28,11 +28,8 @@ class InstructorAPI(Resource):
     @login_required
     def get(self):
         check_role('instructor')
-
         datasets = [(d.name, d.author.name) for d in DataSet.objects()]
-
         instructor = User.objects(email=current_user.email).first()
-
 
         # TODO: Parse data to more structured format
         # per assignment, per query, sort doc, per doc, score and judgment count
@@ -98,7 +95,7 @@ class InstructorAPI(Resource):
             doc_score = result['score']
             document = Document.objects(path=doc_path).first()
             q = Query(content=query)
-            Score(result=doc_score, assignment=assignment, query=q, document=document)
+            Score(result=doc_score, assignment=assignment, query=q, document=document).save()
 
     @staticmethod
     def generate_queries(queries):

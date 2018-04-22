@@ -1,0 +1,60 @@
+{% extends "content_layout.html" %}
+{% block content %}
+<div class="container">
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+
+    <script type="text/javascript">
+    $(window).on('load',function(){
+        $('#wrong').modal('show');
+    });
+
+    </script>
+
+    <div id="wrong" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+    {% endwith %}
+
+    <form id="assignment_form" action="/annotator" method="post">
+        <input type="hidden" name="assignment_name" value="{{assignment.name}}">
+        <input type="hidden" name="instructor_name" value="{{assignment.instructor.name}}">
+        {% for query in queries %}
+        <div class="card">
+            <div class="card-header">
+                {{query}}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                {% for doc in queries[query] %}
+
+                <h6>doc</h6>
+                <select name="annotation[{{query}}][{{doc}}]" required>
+                    <option disabled selected value>-select annotation-</option>
+                    <option value="T">Relevant</option>
+                    <option value="F">Irrelevant</option>
+                </select>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </form>
+    <button type="submit" class="btn btn-primary" form="assignment_form">Submit</button>
+
+</div>
+{% endblock %}

@@ -9,8 +9,6 @@
     $(window).on('load',function(){
         $('#wrong').modal('show');
     });
-
-
     </script>
 
     <div id="wrong" class="modal fade" role="dialog">
@@ -25,13 +23,11 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
-
         </div>
     </div>
 
     {% endif %}
     {% endwith %}
-
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
@@ -49,25 +45,31 @@
             <a class="btn btn-primary" href="/upload">Upload</a>
             <hr class="my-4">
             {% if datasets|length > 0 %}
-            {% for dataset in datasets %}
-            <form action="upload" method="post">
-                <input type="hidden" name="_method" value="DELETE">
-                <input type="hidden" name="ds_name" value="{{dataset[0]}}">
-                <h6>"{{dataset[0]}}" uploaded by {{dataset[1]}}</h6>
-                {% if current_user.name == dataset[1] %}
-                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
-                {% endif %}
-                <button type="button" class="btn btn-outline-warning btn-sm"
-                        data-toggle="modal" data-target="#newAssign"
-                        onclick="$('#assignment_ds_name').val({{dataset[0]}});">Assign
-                </button>
-            </form>
-            {% endfor %}
+            <ul class="list-group">
+                {% for dataset in datasets %}
+                <li class="list-group-item">
+                    <form action="upload" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="ds_name" value="{{dataset[0]}}">
+                        <h6>"{{dataset[0]}}" uploaded by {{dataset[1]}}</h6>
+                        {% if current_user.name == dataset[1] %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                        {% endif %}
+                        <button type="button" class="btn btn-outline-warning btn-sm"
+                                data-toggle="modal" data-target="#newAssign"
+                                onclick="$('#assignment_ds_name').val({{dataset[0]}});">Assign
+                        </button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
             {% else %}
             <h6>No dataset found in system.</h6>
             {% endif %}
         </div>
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="assignment-tab">...</div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="assignment-tab">
+            <!--TODO: assignment view-->
+        </div>
     </div>
 </div>
 
@@ -79,9 +81,8 @@
                 <form action="/instructor" method="post" id="assignment_form">
                     <h6>New Assignment</h6>
                     <input type="hidden" name="ds_name" id="assignment_ds_name">
-
-                    <input type="text" name="assignment_name" class="form-control" placeholder="Assignment Name" required>
-
+                    <input type="text" name="assignment_name" class="form-control" placeholder="Assignment Name"
+                           required>
                     <br>
                     <div class="query">
                         <div class="query-form-group input-group">
@@ -90,10 +91,9 @@
                                                                      type="button">+</button></span>
                         </div>
                     </div>
-
                     <br>
                     <select id="assignment-ranker" name="ranker">
-                        <option disabled selected value> -select a ranker-</option>
+                        <option disabled selected value>-select a ranker-</option>
                         <option value="OkapiBM25">OkapiBM25</option>
                         <option value="JelinekMercer">JelinekMercer</option>
                         <option value="DirichletPrior">DirichletPrior</option>
@@ -101,13 +101,9 @@
                         <option value="PivotedLength">PivotedLength</option>
                     </select>
                     <div id="assignment-params"></div>
-
                     <br>
                     <input type="text" name="num_results" class="form-control" placeholder="Number of documents">
-
-
                 </form>
-
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary" form="assignment_form">Submit</button>
@@ -138,7 +134,6 @@ var removeFormGroup = function (event) {
 };
 $(document).on('click', '.add-query', addFormGroup);
 $(document).on('click', '.remove-query', removeFormGroup);
-
 </script>
 
 <script type="text/javascript">
@@ -163,10 +158,3 @@ $("#assignment-ranker").change(function(){
 </script>
 
 {% endblock %}
-
-<!--Work on AssignmentAPI so instructor can create and view assignment-->
-<!--Create-->
-<!-- - Backend: decide the annotators-->
-<!--View-->
-<!-- - Frontend: show query results - should be able to reuse some stuff-->
-<!-- - Backend: do not show scores-->

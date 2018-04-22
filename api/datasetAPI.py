@@ -27,7 +27,6 @@ class DatasetAPI(Resource):
     @login_required
     def post(self):
         check_role('instructor')
-
         args = parser.parse_args()
         ds_name = args['ds_name']
         author = User.objects(email=current_user.email).first()

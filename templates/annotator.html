@@ -9,8 +9,6 @@
     $(window).on('load',function(){
         $('#wrong').modal('show');
     });
-
-
     </script>
 
     <div id="wrong" class="modal fade" role="dialog">
@@ -25,17 +23,56 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
-
         </div>
     </div>
 
     {% endif %}
     {% endwith %}
 
-
-    <h5> HELLO WORLD </h5>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="dataset-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+               aria-selected="true">Datasets</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="assignment-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+               aria-selected="false">Assignments</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="dataset-tab">
+            {% if datasets|length > 0 %}
+            <ul class="list-group">
+                {% for dataset in datasets %}
+                <li class="list-group-item list-group-item-action">
+                    <label>{{dataset.name}}</label>
+                    <small class="text-muted">Instructor: {{dataset.author.name}}</small>
+                    <a type="button" class="btn btn-info btn-sm float-right"
+                       href="/search/{{dataset.author.name}}/{{dataset.name}}">Search</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <h6>No dataset found in system.</h6>
+            {% endif %}
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="assignment-tab">
+            {% if assignments|length > 0 %}
+            <ul class="list-group">
+                {% for assignment in assignments %}
+                <li class="list-group-item list-group-item-action">
+                    <label>{{assignment.name}}</label>
+                    <small class="text-muted">Instructor: {{assignment.instructor.name}}</small>
+                    <a class="btn btn-success btn-sm float-right"
+                       href="/assignment/{{assignment.instructor.name}}/{{assignment.name}}">Start</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <h6>No dataset found in system.</h6>
+            {% endif %}
+        </div>
+    </div>
 </div>
 
-
 {% endblock %}
-

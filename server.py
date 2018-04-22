@@ -3,9 +3,9 @@ from flask import render_template
 from flask_cors import CORS
 from flask_restful import Api
 from flask_login import LoginManager, current_user, login_required
-from api.annotationAPI import AnnotationAPI
-from api.assignmentAPI import AssignmentAPI, AddQueryAPI
+from api.assignmentAPI import AssignmentAPI
 from api.instructorAPI import InstructorAPI
+from api.annotatorAPI import AnnotatorAPI
 from api.searchAPI import SearchAPI
 from api.datasetAPI import DatasetAPI
 from api.userAPI import RegisterAPI, LoginAPI, LogoutAPI
@@ -17,16 +17,9 @@ app.config.from_object('config')
 api = Api(app)
 CORS(app)
 
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'main'
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.User.objects(pk=user_id).first()
-
 
 db.init_app(app)
 
@@ -34,13 +27,17 @@ api.add_resource(RegisterAPI, '/register')
 api.add_resource(LoginAPI, '/login')
 api.add_resource(LogoutAPI, '/logout')
 
+api.add_resource(InstructorAPI, '/instructor')
+api.add_resource(DatasetAPI, '/upload')
+api.add_resource(AnnotatorAPI, '/annotator')
+api.add_resource(AssignmentAPI, '/assignment/<string:instructor_name>/<string:assignment_name>')
 
 api.add_resource(SearchAPI, '/search/<string:author>/<string:ds_name>')
-api.add_resource(AnnotationAPI, '/annotation')
-api.add_resource(DatasetAPI, '/upload')
-api.add_resource(AssignmentAPI, '/assign')
-api.add_resource(AddQueryAPI, '/newquery')
-api.add_resource(InstructorAPI, '/instructor')
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.User.objects(pk=user_id).first()
 
 
 @app.errorhandler(InvalidUsage)
@@ -57,3 +54,10 @@ def main():
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1')
+
+
+# searchAPI     - check dataset existence, query search
+
+# annotatorAPI  - annotator post annotations
+# instructorAPI - render assignment view
+# assignmentAPI - render annotation assignment
