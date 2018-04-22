@@ -8,8 +8,9 @@ from schema.User import User
 from schema.Query import Query
 from schema.Assignment import Assignment
 from schema.Score import Score
+from schema.Document import Document
 from mongoengine.queryset.visitor import Q
-from util.util import check_role, parse_multi_form
+from util.util import check_role
 
 parser = reqparse.RequestParser()
 parser.add_argument('instructor', type=str)
@@ -36,8 +37,9 @@ class AssignmentAPI(Resource):
         queries = {}
         for q in assignment.queries:
             docs = Score.objects(Q(query=q) & Q(assignment=assignment))
-            queries[q.content] = [doc.document for doc in docs]
+            docs = Document.objects()
+            queries[q] = docs
 
         test = {'testQ1': ['d1', 'd2'], 'testQ2': ['d1', 'd2']}
 
-        return make_response(render_template('assignment.html', assignment=assignment, queries=test))
+        return make_response(render_template('assignment.html', assignment=assignment, queries=queries))

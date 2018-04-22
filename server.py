@@ -9,6 +9,7 @@ from api.annotatorAPI import AnnotatorAPI
 from api.searchAPI import SearchAPI
 from api.datasetAPI import DatasetAPI
 from api.userAPI import RegisterAPI, LoginAPI, LogoutAPI
+from api.documentAPI import DocumentAPI
 from schema import db, redis_store, User
 from util.exception import InvalidUsage
 
@@ -33,7 +34,7 @@ api.add_resource(AnnotatorAPI, '/annotator')
 api.add_resource(AssignmentAPI, '/assignment/<string:instructor_name>/<string:assignment_name>')
 
 api.add_resource(SearchAPI, '/search/<string:author>/<string:ds_name>')
-
+api.add_resource(DocumentAPI, '/document/<string:doc_id>')
 
 @login_manager.user_loader
 def load_user(user_id):
