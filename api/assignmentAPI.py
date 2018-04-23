@@ -1,15 +1,11 @@
-from flask import make_response, render_template, current_app, jsonify, flash, redirect, url_for
-from flask_restful import Resource, reqparse
-from flask_login import login_required, current_user
+from flask import make_response, render_template, flash, redirect, url_for
+from flask_login import login_required
+from flask_restful import Resource
+from mongoengine.queryset.visitor import Q
 
-from schema.DataSet import DataSet
-
-from schema.User import User
-from schema.Query import Query
 from schema.Assignment import Assignment
 from schema.Score import Score
-from schema.Document import Document
-from mongoengine.queryset.visitor import Q
+from schema.User import User
 from util.util import check_role
 
 
@@ -24,11 +20,9 @@ class AssignmentAPI(Resource):
             flash('No Such Assignment!')
             return redirect(url_for('annotatorapi'))
         queries = {}
+        assignment_score = Score.objects(assignment=assignment)
         for q in assignment.queries:
-            docs = Score.objects(Q(query=q) & Q(assignment=assignment))
-            docs = Document.objects()
-            queries[q] = docs
-
-        test = {'testQ1': ['d1', 'd2'], 'testQ2': ['d1', 'd2']}
+            scores = assignment_score.filter(query=q)
+            queries[q] = [score.document for score in scores]
 
         return make_response(render_template('assignment.html', assignment=assignment, queries=queries))
