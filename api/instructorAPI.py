@@ -92,7 +92,6 @@ class InstructorAPI(Resource):
             results = searcher.search(query, ranker, params, num_results)['results']
             for result in results:
                 doc_path = str(os.path.join(path, result['path'].encode('utf8')[2:]))
-                print('doc_path', doc_path)
                 doc_score = result['score']
                 document = Document.objects(path=doc_path).first()
                 q = Query.objects(content=query).first()
@@ -120,5 +119,5 @@ class InstructorAPI(Resource):
         keys = rankers[ranker]
         result = {}
         for i in range(len(keys)):
-            result[keys[i]] = params[i]
+            result[keys[i]] = float(params[i])
         return result
