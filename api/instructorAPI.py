@@ -64,7 +64,6 @@ class InstructorAPI(Resource):
 
         instructor = User.objects(email=current_user.email).first()
         dataset = DataSet.objects(name=dataset_name).first()
-
         assignment = Assignment(name=assignment_name, instructor=instructor, data_set=dataset,
                                 ranker=ranker, params=params, num_results=num_results)
         try:
@@ -90,12 +89,14 @@ class InstructorAPI(Resource):
         path = os.path.join(current_app.root_path, 'data', author.name)
         searcher = Searcher(dataset_name, path)
         for query in queries:
-            result = searcher.search(query, ranker, params, num_results)
-            doc_path = result['path']
-            doc_score = result['score']
-            document = Document.objects(path=doc_path).first()
-            q = Query(content=query)
-            Score(result=doc_score, assignment=assignment, query=q, document=document).save()
+            results = searcher.search(query, ranker, params, num_results)['results']
+            for result in results:
+                doc_path = str(os.path.join(path, result['path'].encode('utf8')[2:]))
+                print('doc_path', doc_path)
+                doc_score = result['score']
+                document = Document.objects(path=doc_path).first()
+                q = Query.objects(content=query).first()
+                Score(result=doc_score, assignment=assignment, query=q, document=document).save()
 
     @staticmethod
     def generate_queries(queries):
