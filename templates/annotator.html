@@ -31,11 +31,11 @@
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="dataset-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+            <a class="nav-link" id="dataset-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
                aria-selected="true">Datasets</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="assignment-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+            <a class="nav-link active" id="assignment-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
                aria-selected="false">Assignments</a>
         </li>
     </ul>
@@ -47,7 +47,7 @@
                 <li class="list-group-item list-group-item-action">
                     <label>{{dataset.name}}</label>
                     <small class="text-muted">Instructor: {{dataset.author.name}}</small>
-                    <a type="button" class="btn btn-info btn-sm float-right"
+                    <a type="button" class="btn btn-info btn-sm float-right disabled"
                        href="/search/{{dataset.author.name}}/{{dataset.name}}">Search</a>
                 </li>
                 {% endfor %}

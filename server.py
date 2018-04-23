@@ -6,7 +6,6 @@ from flask_login import LoginManager, current_user, login_required
 from api.assignmentAPI import AssignmentAPI
 from api.instructorAPI import InstructorAPI
 from api.annotatorAPI import AnnotatorAPI
-from api.searchAPI import SearchAPI
 from api.datasetAPI import DatasetAPI
 from api.userAPI import RegisterAPI, LoginAPI, LogoutAPI
 from api.documentAPI import DocumentAPI
@@ -32,8 +31,6 @@ api.add_resource(InstructorAPI, '/instructor')
 api.add_resource(DatasetAPI, '/upload')
 api.add_resource(AnnotatorAPI, '/annotator')
 api.add_resource(AssignmentAPI, '/assignment/<string:instructor_name>/<string:assignment_name>')
-
-api.add_resource(SearchAPI, '/search/<string:author>/<string:ds_name>')
 api.add_resource(DocumentAPI, '/document/<string:doc_id>')
 
 @login_manager.user_loader
