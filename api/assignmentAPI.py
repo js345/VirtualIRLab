@@ -12,17 +12,6 @@ from schema.Document import Document
 from mongoengine.queryset.visitor import Q
 from util.util import check_role
 
-parser = reqparse.RequestParser()
-parser.add_argument('instructor', type=str)
-parser.add_argument('annotator', type=str)
-parser.add_argument('dataset', type=str)
-parser.add_argument('query', type=str)
-parser.add_argument('ranker', type=str)
-parser.add_argument('params', type=dict)
-parser.add_argument('status', type=bool)
-parser.add_argument('content', type=str)
-parser.add_argument('creator', type=str)
-
 
 class AssignmentAPI(Resource):
     @login_required

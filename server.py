@@ -59,6 +59,5 @@ if __name__ == '__main__':
 
 # searchAPI     - check dataset existence, query search
 
-# annotatorAPI  - annotator post annotations
 # instructorAPI - render assignment view
 # assignmentAPI - render annotation assignment
