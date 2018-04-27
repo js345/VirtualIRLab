@@ -8,36 +8,6 @@
     <hr class="my-4">
     <p>Whatever...</p>
 
-
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-
-    <script type="text/javascript">
-    $(window).on('load',function(){
-        $('#wrong').modal('show');
-    });
-
-    </script>
-
-    <div id="wrong" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    {% for message in messages %}
-                    <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {% endif %}
-    {% endwith %}
-
-
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signin-modal">
         Sign In
     </button>

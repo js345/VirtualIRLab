@@ -2,34 +2,6 @@
 {% block content %}
 <div class="container">
 
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-
-    <script type="text/javascript">
-    $(window).on('load',function(){
-        $('#wrong').modal('show');
-    });
-
-    </script>
-
-    <div id="wrong" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    {% for message in messages %}
-                    <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {% endif %}
-    {% endwith %}
-
     <form id="assignment_form" action="/annotator" method="post">
         <input type="hidden" name="assignment_id" value="{{assignment.id}}">
         {% for query in queries %}

@@ -1,34 +1,6 @@
 {% extends "content_layout.html" %}
 {% block content %}
 <div class="container">
-
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-
-    <script type="text/javascript">
-    $(window).on('load',function(){
-        $('#wrong').modal('show');
-    });
-    </script>
-
-    <div id="wrong" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    {% for message in messages %}
-                    <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {% endif %}
-    {% endwith %}
-
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
             <a class="nav-link" id="dataset-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
