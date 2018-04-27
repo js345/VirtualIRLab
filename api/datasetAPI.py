@@ -5,7 +5,6 @@ from flask import make_response, current_app, request, render_template, flash, r
 from flask_login import login_required, current_user
 from flask_restful import Resource, reqparse
 from mongoengine.errors import NotUniqueError
-from mongoengine.queryset.visitor import Q
 from werkzeug.utils import secure_filename
 
 from schema.DataSet import DataSet
@@ -34,7 +33,7 @@ class DatasetAPI(Resource):
         ds_dir = os.path.join(author_dir, ds_name)
 
         if args['_method'] == 'DELETE':
-            dataset = DataSet.objects(Q(author=author) & Q(name=ds_name)).first()
+            dataset = DataSet.objects(author=author, name=ds_name).first()
             shutil.rmtree(ds_dir)
             for doc in Document.objects(data_set=dataset):
                 doc.delete()

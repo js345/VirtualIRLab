@@ -31,21 +31,21 @@ class InstructorAPI(Resource):
         datasets = [(d.name, d.author.name) for d in DataSet.objects()]
         instructor = User.objects(email=current_user.email).first()
 
-        # TODO: Parse data to more structured format
-        # per assignment, per query, sort doc, per doc, score and judgment count
+        assignments = {}
+        for assignment in Assignment.objects(instructor=instructor):
+            assignments[(assignment.name, assignment.instructor.name)] = (self.get_judgement_score(assignment))
 
-        scores = []
-        annotations = []
-        assignments = []
-        for a in Assignment.objects(instructor=instructor):
-            assignments.append((a.name, a.data_set, a.ranker, a.params, a.num_results))
-            for s in Score.objects(assignment=a):
-                scores.append((s.result, s.query.content, s.document.path, s.document.name))
-            for n in Annotation.objects(assignment=a):
-                annotations.append(n)
+        result = {('a1', 'i1'): {'q1': {'d1': {'score': 1, 'relevant': 2, 'irrelevant': 3},
+                                        'd2': {'score': 4, 'relevant': 5, 'irrelevant': 6}},
+                                 'q2': {'d1': {'score': 11, 'relevant': 22, 'irrelevant': 33},
+                                        'd2': {'score': 44, 'relevant': 55, 'irrelevant': 66}}},
+
+                  ('a2', 'i2'): {'q1': {'d1': {'score': 1111, 'relevant': 2, 'irrelevant': 3},
+                                        'd2': {'score': 4, 'relevant': 5555, 'irrelevant': 6}}},
+                  }
 
         return make_response(render_template('instructor.html',
-                                             datasets=datasets, assignments=assignments, scores=scores))
+                                             datasets=datasets, assignments=result))
 
     @login_required
     def post(self):
@@ -120,4 +120,21 @@ class InstructorAPI(Resource):
         result = {}
         for i in range(len(keys)):
             result[keys[i]] = float(params[i])
+        return result
+
+    @staticmethod
+    def get_judgement_score(assignment):
+        queries = assignment.queries
+        scores = Score.objects(assignment=assignment)
+        result = {}
+        for query in queries:
+            query_result = {}
+            for doc_score in scores.filter(query=query):
+                score = doc_score.result
+                doc = doc_score.document
+                relevant = Annotation.objects(doc=doc, query=query, assignment=assignment, judgement=True).count()
+                irrelevant = Annotation.objects(doc=doc, query=query, assignment=assignment, judgement=False).count()
+                doc_result = {'score': score, 'relevant': relevant, 'irrelevant': irrelevant}
+                query_result[doc.name] = doc_result
+            result[query.content] = query_result
         return result

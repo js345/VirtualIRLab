@@ -1,7 +1,6 @@
 from flask import make_response, render_template, flash, redirect, url_for
 from flask_login import login_required
 from flask_restful import Resource
-from mongoengine.queryset.visitor import Q
 
 from schema.Assignment import Assignment
 from schema.Score import Score
@@ -15,7 +14,7 @@ class AssignmentAPI(Resource):
         # TODO: annotation view
         check_role('annotator')
         instructor = User.objects(name=instructor_name).first()
-        assignment = Assignment.objects(Q(name=assignment_name) & Q(instructor=instructor)).first()
+        assignment = Assignment.objects(name=assignment_name, instructor=instructor).first()
         if not assignment:
             flash('No Such Assignment!')
             return redirect(url_for('annotatorapi'))

@@ -33,6 +33,7 @@ api.add_resource(AnnotatorAPI, '/annotator')
 api.add_resource(AssignmentAPI, '/assignment/<string:instructor_name>/<string:assignment_name>')
 api.add_resource(DocumentAPI, '/document/<string:doc_id>')
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.User.objects(pk=user_id).first()
@@ -53,8 +54,4 @@ def main():
 if __name__ == '__main__':
     app.run(host='127.0.0.1')
 
-
-# searchAPI     - check dataset existence, query search
-
 # instructorAPI - render assignment view
-# assignmentAPI - render annotation assignment
