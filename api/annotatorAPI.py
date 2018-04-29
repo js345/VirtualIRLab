@@ -10,7 +10,8 @@ from schema.Document import Document
 from schema.Query import Query
 from schema.User import User
 from util.util import check_role, parse_multi_form
-
+from util.nsa import OutputDecision
+import numpy as np
 
 class AnnotatorAPI(Resource):
     @login_required
@@ -45,6 +46,7 @@ class AnnotatorAPI(Resource):
                     Annotation(user, query, doc, judgement, assignment).save()
                 except (NotUniqueError, ValidationError):
                     return False
+        AnnotatorAPI.query_nsa_filter(assignment)
         return True
 
     @staticmethod
@@ -54,3 +56,40 @@ class AnnotatorAPI(Resource):
         args = parser.parse_args()
         args['annotation'] = parse_multi_form(request.form)['annotation']
         return args
+
+    @staticmethod
+    def query_nsa_filter(assignment):
+        queries_need_to_show_new = []
+        for q in assignment.queries_need_to_show:
+            all_annotations_of_the_query = Annotation.objects(query=q)
+            annotations = []
+            for annotation in all_annotations_of_the_query:
+                if annotation.assignment.name == assignment.name and annotation.assignment.instructor == assignment.instructor:
+                    annotations.append(annotation)
+            students = {}
+            student_list = []
+            documents = {}
+            for annotation in annotations:
+                if annotation.annotator.id not in students.keys():
+                    students[annotation.annotator.id] = len(students)
+                    student_list.append(annotation.annotator.id)
+                if annotation.doc.id not in documents.keys():
+                    documents[annotation.doc.id] = len(documents)
+            students_annotations_res = np.zeros((len(documents), len(students)), dtype=int)
+            credibility_scores = np.zeros(len(students))
+            for annotation in annotations:
+                score = 1 if annotation.judgement else -1
+                students_annotations_res[documents[annotation.doc.id]][students[annotation.annotator.id]] = score
+            for studentID, pos in students.items():
+                credibility_scores[pos] = User.objects(id=studentID).first().credibility_score
+            res = OutputDecision.Decision(students_annotations_res, credibility_scores)
+            if res.completed:
+                for i in range(len(student_list)):
+                    userobj = User.objects(id=student_list[i]).first()
+                    old_credibility_score = userobj.credibility_score
+                    new_credibility_score = old_credibility_score + (
+                            res.new_credibility_scores[i] - old_credibility_score) / 3
+                    userobj.update(credibility_score=new_credibility_score)
+            else:
+                queries_need_to_show_new.append(q)
+        assignment.update(queries_need_to_show=queries_need_to_show_new)
