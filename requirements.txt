@@ -7,3 +7,4 @@ flask-redis
 flask-login
 pytoml==0.1.11
 metapy==0.0.1.dev6
+numpy

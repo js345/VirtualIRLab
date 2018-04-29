@@ -12,7 +12,7 @@
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="dataset-tab">
+        <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="dataset-tab">
             {% if datasets|length > 0 %}
             <ul class="list-group">
                 {% for dataset in datasets %}
@@ -28,7 +28,7 @@
             <h6>No dataset found in system.</h6>
             {% endif %}
         </div>
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="assignment-tab">
+        <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="assignment-tab">
             {% if assignments|length > 0 %}
             <ul class="list-group">
                 {% for assignment in assignments %}

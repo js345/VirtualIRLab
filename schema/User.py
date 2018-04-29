@@ -9,6 +9,7 @@ class User(UserMixin, db.Document):
     email = db.StringField(required=True, unique=True)
     role = db.StringField(required=True, choices=('annotator', 'instructor'))
     password = db.StringField(required=True)
+    credibility_score = db.FloatField(default=0.75)
 
     @staticmethod
     def hash_password(password):
