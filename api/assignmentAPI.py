@@ -7,7 +7,7 @@ from schema.Annotation import Annotation
 from schema.Score import Score
 from schema.User import User
 from util.util import check_role
-from util.nsa import output
+from util.nsa import OutputDecision
 import numpy as np
 
 class AssignmentAPI(Resource):
@@ -50,7 +50,7 @@ class AssignmentAPI(Resource):
                 students_annotations_res[documents[annotation.doc.id]][students[annotation.annotator.id]] = score
             for studentID, pos in students.items():
                 credibility_scores[pos] = User.objects(id=studentID).first().credibility_score
-            res = output.Decision(students_annotations_res, credibility_scores)
+            res = OutputDecision.Decision(students_annotations_res, credibility_scores)
             if not res.completed:
                 queries_need_to_show_new.append(q)
                 for i in range(len(student_list)):

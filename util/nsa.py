@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class output:
+class OutputDecision:
     TH1 = 2
     TH2 = 0.5
     k_max = 5
@@ -12,7 +12,7 @@ class output:
         self.completed = False
 
     @staticmethod
-    def ModifiedInference(esitmation, credibility_scores, k_max):
+    def modifiedInference(esitmation, credibility_scores, k_max):
         row_num, column_num = esitmation.shape
         Y = np.zeros((row_num, column_num))
         X = np.zeros((row_num, column_num))
@@ -37,7 +37,7 @@ class output:
             Y, Y_new = Y_new, Y
             X, X_new = X_new, X
 
-        res = output(row_num, column_num)
+        res = OutputDecision(row_num, column_num)
         for i in range(0, row_num):
             tmp = 0.0
             for j in range(0, column_num):
@@ -63,18 +63,18 @@ class output:
     def Decision(A, credibility_scores, TH1=TH1, TH2=TH2, k_max=k_max):
         row_num, column_num = A.shape
         if column_num < TH1:
-            return output(0, 0)
-        res = output.ModifiedInference(A, credibility_scores, k_max)
+            return OutputDecision(0, 0)
+        res = OutputDecision.modifiedInference(A, credibility_scores, k_max)
         S_total = np.sum(credibility_scores)
         for i in range(0, row_num):
             if res.final_ans[i] == 0:
-                return output(0, 0)
+                return OutputDecision(0, 0)
             S_correct = 0.0
             for j in range(0, column_num):
                 if A[i][j] == res.final_ans[i]:
                     S_correct += credibility_scores[j]
             if S_total * TH2 > S_correct:
-                return output(0, 0)
+                return OutputDecision(0, 0)
         res.completed = True
         # avoid very low value in credibility scores, in which case the student's answer
         # cannot make any contribution for further assignments.
