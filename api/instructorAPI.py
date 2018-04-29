@@ -35,17 +35,8 @@ class InstructorAPI(Resource):
         for assignment in Assignment.objects(instructor=instructor):
             assignments[(assignment.name, assignment.instructor.name)] = (self.get_judgement_score(assignment))
 
-        result = {('a1', 'i1'): {'q1': {'d1': {'score': 1, 'relevant': 2, 'irrelevant': 3},
-                                        'd2': {'score': 4, 'relevant': 5, 'irrelevant': 6}},
-                                 'q2': {'d1': {'score': 11, 'relevant': 22, 'irrelevant': 33},
-                                        'd2': {'score': 44, 'relevant': 55, 'irrelevant': 66}}},
-
-                  ('a2', 'i2'): {'q1': {'d1': {'score': 1111, 'relevant': 2, 'irrelevant': 3},
-                                        'd2': {'score': 4, 'relevant': 5555, 'irrelevant': 6}}},
-                  }
-
         return make_response(render_template('instructor.html',
-                                             datasets=datasets, assignments=result))
+                                             datasets=datasets, assignments=assignments))
 
     @login_required
     def post(self):
