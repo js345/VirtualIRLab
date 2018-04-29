@@ -65,7 +65,7 @@ class InstructorAPI(Resource):
 
         q = self.generate_queries(queries)
         assignment.update(queries=q)
-
+        assignment.update(queries_need_to_show=q)
         try:
             self.search(assignment, dataset_name, queries, ranker, params, num_results)
         except Exception as e:

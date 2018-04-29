@@ -32,7 +32,6 @@ class AnnotatorAPI(Resource):
     @staticmethod
     def store_annotations(annotations, assignment_id):
         assignment = Assignment.objects(id=assignment_id).first()
-        print(annotations)
         for query_id in annotations:
             query = Query.objects(id=query_id).first()
             for doc_id in annotations[query_id]:

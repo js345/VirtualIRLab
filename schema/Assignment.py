@@ -10,3 +10,4 @@ class Assignment(db.DynamicDocument):
     ranker = db.StringField(required=True)
     params = db.DictField(required=True)
     num_results = db.IntField(default=5)
+    queries_need_to_show = db.ListField(db.ReferenceField('Query'), default=[])
