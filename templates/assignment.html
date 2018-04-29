@@ -1,0 +1,30 @@
+{% extends "content_layout.html" %}
+{% block content %}
+<div class="container">
+
+    <form id="assignment_form" action="/annotator" method="post">
+        <input type="hidden" name="assignment_id" value="{{assignment.id}}">
+        {% for query in queries %}
+        <div class="card">
+            <div class="card-header">
+                {{query.content}}
+            </div>
+            <div class="card-body">
+                {% for doc in queries[query] %}
+                <a href=" ">{{doc.name}}</a >
+                <select name="annotation[{{query.id}}][{{doc.id}}]" required>
+                    <option disabled selected value>-select annotation-</option>
+                    <option value="T">Relevant</option>
+                    <option value="F">Irrelevant</option>
+                </select>
+                <br>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </form>
+    <button type="submit" class="btn btn-primary" form="assignment_form">Submit</button>
+</div>
+
+
+{% endblock %}

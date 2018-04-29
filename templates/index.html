@@ -1,91 +1,75 @@
-{% extends "content_layout.html" %}
+{% extends "basic_layout.html" %}
 
-{% block content %}
+{% block body %}
+
 <div class="jumbotron">
-	<!-- css -->
-	<link href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet"/>
-	<script type="text/javascript" src="{{url_for('static', filename='javascript/index.js')}}"></script>
+    <h2 class="display-3">Virtual IR Lab</h2>
+    <p class="lead">Welcome to CS410</p>
+    <hr class="my-4">
+    <p>Whatever...</p>
 
-	<h2>Welcome to CS410</h2>
-	<br>
-	<p>Sign up if you don't have an account</p>
-	<button class="btn btn-primary" data-toggle="modal" data-target="#login-modal" style="margin-top: 30px;">Login</button>
-	<button class="btn btn-primary" data-toggle="modal" data-target="#signup-modal" style="margin-top: 30px;">Sign up</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signin-modal">
+        Sign In
+    </button>
 
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signup-modal">
+        Sign Up
+    </button>
 
-	<!-- login modal -->
-	<div class="modal fade" id="login-modal" role="dialog" style="margin-top:100px;">
-	    <div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header" style="border-bottom: none;">
-				  <button type="button" class="close" data-dismiss="modal">&times;</button>
-				  <h3 class="modal-title">Log in</h3>
-				</div>
-				<div class="modal-body">
+    <div class="modal fade" id="signin-modal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form action="/login" method="post" id="signin">
+                        <div class="form-group">
+                            <label for="siemail">Email:</label>
+                            <input type="email" class="form-control" name="email" id="siemail">
+                        </div>
+                        <div class="form-group">
+                            <label for="sipwd">Password:</label>
+                            <input type="password" class="form-control" name="password" id="sipwd">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary signupbtn" type="submit" form="signin">Sign In</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-				  <div class="row">
-				    <label class="col-sm-2 control-label col-sm-offset-1">Email</label>
-				    <div class="col-sm-8">
-				      <input id="login-email" class="form-control" type="text">
-				    </div>
-				  </div>
-				  <div class="row">
-				    <label class="col-sm-2 control-label col-sm-offset-1">Password</label>
-				    <div class="col-sm-8">
-				      <input id="login-password" class="form-control" type="password">
-				    </div>
-				  </div>
-				</div>
-				<div class="modal-footer" style="border-top: none;">
-				  <button id="login-btn" type="button" class="btn btn-primary" data-dismiss="modal">Log in</button>
-				  <button type="button" class="btn btn-primary" data-dismiss="modal">Forgot</button>
-				</div>
-			</div>
-		</div>
-	</div><!-- end of login modal -->
-
-	<!-- sign up modal -->
-	<div class="modal fade" id="signup-modal" role="dialog" style="margin-top:100px;">
-	    <div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header" style="border-bottom: none;">
-				  <button type="button" class="close" data-dismiss="modal">&times;</button>
-				  <h3 class="modal-title">Sign Up</h3>
-				</div>
-				<div class="modal-body">
-
-				  <div class="row">
-				    <label class="col-sm-2 control-label col-sm-offset-1">Email</label>
-				    <div class="col-sm-8">
-				      <input id="signup-email" class="form-control" type="text">
-				    </div>
-				  </div>
-				  <div class="row">
-				    <label class="col-sm-2 control-label col-sm-offset-1">Name</label>
-				    <div class="col-sm-8">
-				      <input id="signup-name" class="form-control" type="text">
-				    </div>
-				  </div>
-				  <div class="row">
-				    <label class="col-sm-2 control-label col-sm-offset-1">Password</label>
-				    <div class="col-sm-8">
-				      <input id="signup-password" class="form-control" name="password" type="password">
-				    </div>
-				  </div>
-				  <div class="row">
-				    <label class="col-sm-2 control-label col-sm-offset-1">Role:</label>
-				    <div class="col-sm-8">
-				      <label><input type="radio" name="group" value="instructor"> Instructor</label>
-				      <label><input type="radio" name="group" value="annotator"> Annotator</label>
-				    </div>
-				  </div>
-
-				</div>
-				<div class="modal-footer" style="border-top: none;">
-				  <button id="signup-btn" type="button" class="btn btn-primary" data-dismiss="modal">Sign Up</button>
-				</div>
-			</div>
-		</div>
-	</div><!-- end of sign up modal -->
+    <div class="modal fade" id="signup-modal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form action="/register" method="post" id="signup">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-control" name="name" id="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="suemail">Email:</label>
+                            <input type="email" class="form-control" name="email" id="suemail">
+                        </div>
+                        <div class="form-group">
+                            <label for="supwd">Password:</label>
+                            <input type="password" class="form-control" name="password" id="supwd">
+                        </div>
+                        <label>Role:</label><br>
+                        <label><input type="radio" name="role" value="instructor"> Instructor</label>
+                        <label><input type="radio" name="role" value="annotator"> Annotator</label>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary signupbtn" type="submit" form="signup">Sign up</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 {% endblock %}
